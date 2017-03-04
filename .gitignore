@@ -1,1 +1,4 @@
 resources.txt
+twweet_cli.egg-info
+dist
+build
