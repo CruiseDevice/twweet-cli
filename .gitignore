@@ -3,3 +3,4 @@ twweet_cli.egg-info
 dist
 build
 setup.py
+CruiseDevice_tweets.csv
