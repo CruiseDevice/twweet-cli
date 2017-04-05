@@ -4,7 +4,8 @@ python:
 cache: pip
 install:
   - pip install pep8
+  - pip install --upgrade pyflakes
 script:
-  - pep8 --show-source --show-pep8 setup.py
-  - pep8 --show-source --show-pep8 twweet-cli.py
+  - pyflakes setup.py
+  - pyflakes twweet-cli.py
   - python setup.py install
