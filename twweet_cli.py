@@ -98,7 +98,7 @@ def main():
        c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)  
        conn.commit()
        conn.close       
-    get_api(cfg)
+    api = get_api(cfg)
 
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
