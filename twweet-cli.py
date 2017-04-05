@@ -3,10 +3,10 @@ import csv
 
 # Twitter API credentials
 cfg = {
-   "consumer_key"        : "kEex4FTVUgiv0UbQ9IQ2KNXVS",
-   "consumer_secret"     : "9wxktWy7uFg6LVUvf31f9lv7n0WMEDgLn658upiNTb0ZtOt6gB",
-   "access_token"        : "2394096084-kCTveFvm2JXsnYSk8wIlR0nOyw1BaZLDLlxrzNP",
-   "access_token_secret" : "PFWOFw3ZxYj0niXjqornMkLn0m3M6l7zZJ9POJbwLXwlu"
+   "consumer_key"        : "",
+   "consumer_secret"     : "",
+   "access_token"        : "",
+   "access_token_secret" : ""
    }
 
 
@@ -70,7 +70,7 @@ def get_tweets_of_hashtag(hash_tag):
     while new_tweets:
         for tweet in new_tweets:
             all_tweets.append(tweet.text.encode("utf-8"))
-            #max_id will be id of last tweet when loop completes. shitty wasy of doing things
+            #max_id will be id of last tweet when loop completes (shitty way)
             max_id = tweet.id
 
         print "We have got %s tweets so far" % (len(all_tweets))
