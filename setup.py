@@ -37,7 +37,10 @@ setup(
 
     keywords='twitter tweet cli',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-
+    install_requires=[
+         'tweepy',
+     ],
+    
      py_modules=["twweet-cli"],
 
 )
