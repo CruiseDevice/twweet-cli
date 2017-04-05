@@ -77,7 +77,7 @@ def editapi():
 
 def main():
   
-      if os.path.isfile(db):
+    if os.path.isfile(db):
        conn = sqlite3.connect(db)
        c=conn.cursor()
        c.execute("SELECT * FROM ApiDetails")
@@ -112,3 +112,5 @@ def main():
        
 if __name__ == "__main__":
   main()
+
+			
