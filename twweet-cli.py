@@ -3,10 +3,10 @@ import csv
 
 # Twitter API credentials
 cfg = {
-   "consumer_key"        : "",
-   "consumer_secret"     : "",
-   "access_token"        : "",
-   "access_token_secret" : ""
+   "consumer_key"        : "<Your consumer_key>",
+   "consumer_secret"     : "<Your consumer_secret>",
+   "access_token"        : "<Your access_token>",
+   "access_token_secret" : "<Your access_token_secret>"
    }
 
 
