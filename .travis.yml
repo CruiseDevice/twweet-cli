@@ -2,6 +2,9 @@ language: python
 python:
   - "2.7"
 cache: pip
+install:
+  - pip install pep8
 script:
+  - pep8 --first setup.py
+  - pep8 --first twweet-cli.py
   - python setup.py install
-  - pytest
