@@ -58,8 +58,38 @@ def get_all_tweets(screen_name):
 
     pass
 
+#function to download the tweets of a particular hashtag
+def get_tweets_of_hashtag(hash_tag):
+    all_tweets = []
+    new_tweets = []
+    print "Please be patient while we download the tweets"
+
+    api = get_api(cfg)
+    new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
+
+    while new_tweets:
+        for tweet in new_tweets:
+            all_tweets.append(tweet.text.encode("utf-8"))
+            #max_id will be id of last tweet when loop completes (shitty way)
+            max_id = tweet.id
+
+        print "We have got %s tweets so far" % (len(all_tweets))
+        new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
+
+        if (len(all_tweets)) >= 1000:
+            break
+
+    with open('%s.csv'%hash_tag, 'wb') as f:
+        writer = csv.writer(f)
+        for tweet in all_tweets:
+            if tweet:
+                writer.writerow([tweet])
+
+    print "1000 tweets have been saved to %s.csv" % hash_tag
+
+
 def main():
-  
+
 
     api = get_api(cfg)
 
@@ -69,6 +99,11 @@ def main():
         status = api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
-        get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+        option = raw_input('1.Get tweets of a user \n2.Get tweets of particular hashtag \n:')
+        if option == '1':
+            get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+        elif option == '2':
+            get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
+
 if __name__ == "__main__":
   main()
