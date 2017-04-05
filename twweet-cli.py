@@ -1,14 +1,16 @@
+import sqlite3
 import tweepy
+import os
 import csv
 
 # Twitter API credentials
 cfg = {
-   "consumer_key"        : "<Your consumer_key>",
-   "consumer_secret"     : "<Your consumer_secret>",
-   "access_token"        : "<Your access_token>",
-   "access_token_secret" : "<Your access_token_secret>"
+   "consumer_key"        : "",
+   "consumer_secret"     : "",
+   "access_token"        : "",
+   "access_token_secret" : ""
    }
-
+db = './TwtApi.db'
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -58,17 +60,55 @@ def get_all_tweets(screen_name):
 
     pass
 
+def editapi():
+    os.remove(db)
+    conn = sqlite3.connect(db)
+    c=conn.cursor()
+    c.execute('''CREATE TABLE ApiDetails
+                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
+    cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
+    cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
+    cfg["access_token"] = raw_input('Enter your Access Token: ')
+    cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
+    c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
+    conn.commit()
+    conn.close
+    main()
+
 def main():
   
-
+      if os.path.isfile(db):
+       conn = sqlite3.connect(db)
+       c=conn.cursor()
+       c.execute("SELECT * FROM ApiDetails")
+       cfgdb = list(c.fetchone())
+       cfg["consumer_key"] = str(cfgdb[0])
+       cfg["consumer_secret"] = str(cfgdb[1])
+       cfg["access_token"] = str(cfgdb[2])
+       cfg["access_token_secret"] = str(cfgdb[3])
+    else:
+       conn = sqlite3.connect(db) 
+       c=conn.cursor()
+       c.execute('''CREATE TABLE ApiDetails
+                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''') 
+       cfg["consumer_key"] = raw_input('Enter your Consumer Key: ') 
+       cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
+       cfg["access_token"] = raw_input('Enter your Access Token: ')
+       cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
+       c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)  
+       conn.commit()
+       conn.close       
     api = get_api(cfg)
 
-    option = raw_input('Enter \'twweet\' or \'get\' ')
+    option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
         tweet = raw_input('Enter your twweet\n')
         status = api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
         get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+    elif option == 'edit':
+        editapi()
+       
 if __name__ == "__main__":
   main()
