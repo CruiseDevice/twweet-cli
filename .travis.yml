@@ -4,4 +4,4 @@ python:
 cache: pip
 script:
   - python setup.py install
-  - python -m twweet-cli
+  - pytest
