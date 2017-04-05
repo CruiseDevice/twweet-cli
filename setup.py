@@ -46,4 +46,5 @@ setup(
         'console_scripts': [
             'twweet-cli = twweet_cli:main',
         ],
+     }
 )
