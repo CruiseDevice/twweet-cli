@@ -98,11 +98,12 @@ def main():
        c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)  
        conn.commit()
        conn.close       
-    api = get_api(cfg)
+    get_api(cfg)
 
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
         tweet = raw_input('Enter your twweet\n')
+	api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
         get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
