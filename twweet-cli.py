@@ -2,7 +2,7 @@ import tweepy
 import csv
 
 # Twitter API credentials
- cfg = {
+cfg = {
    "consumer_key"        : "<Your consumer_key>",
    "consumer_secret"     : "<Your consumer_secret>",
    "access_token"        : "<Your access_token>",
