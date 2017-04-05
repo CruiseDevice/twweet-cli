@@ -5,6 +5,6 @@ cache: pip
 install:
   - pip install pep8
 script:
-  - pep8 --first setup.py
-  - pep8 --first twweet-cli.py
+  - pep8 --show-source --show-pep8 setup.py
+  - pep8 --show-source --show-pep8 twweet-cli.py
   - python setup.py install
