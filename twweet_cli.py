@@ -103,7 +103,6 @@ def main():
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
         tweet = raw_input('Enter your twweet\n')
-        status = api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
         get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
