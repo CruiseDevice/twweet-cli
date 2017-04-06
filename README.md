@@ -19,6 +19,6 @@ Now run setup.py file.
 
 Run the application
 
-`$ python -m twweet-cli.py`
+`$ python -m twweet-cli`
 
 Note: Needs Python 2.7
