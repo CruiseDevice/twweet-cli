@@ -15,6 +15,10 @@ Tweet right from your cli without even opening your browser.
 
 Now run setup.py file.
 
-`$ python twweet-cli.py`
+`$ python setup.py install`
+
+Run the application
+
+`$ python -m twweet-cli.py`
 
 Note: Needs Python 2.7
