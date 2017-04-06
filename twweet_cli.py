@@ -105,6 +105,16 @@ def get_tweets_of_hashtag(hash_tag):
     print "1000 tweets have been saved to %s.csv" % hash_tag
 
 
+def get_trending_topics():
+
+    api = get_api(cfg)
+
+    trends1 = api.trends_place(1) #1 for worldwide
+    data = trends1[0]
+    trends = data['trends']
+    print "\nTrending topics worldwide :"
+    for item in trends:
+        print item['name']
 
 def main():
 
@@ -137,11 +147,13 @@ def main():
 	api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
-        option = raw_input('1.Get tweets of a user \n2.Get tweets of particular hashtag \n:')
+        option = raw_input('1.Get tweets of a user \n2.Get tweets of particular hashtag \n3.Get trending topics\n:')
         if option == '1':
             get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
             get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
+        elif option == '3':
+            get_trending_topics()
     elif option == 'edit':
         editapi()
 
