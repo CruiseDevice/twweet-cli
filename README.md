@@ -1,7 +1,7 @@
 # twweet-cli
 Tweet right from your cli without even opening your browser.
 
-[![Join the chat at https://gitter.im/twweet-cli/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twweet-cli/Lobby)[![Build Status](https://travis-ci.org/nithinswarrier/twweet-cli.svg?branch=master)](https://travis-ci.org/nithinswarrier/twweet-cli)
+[![Join the chat at https://gitter.im/twweet-cli/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twweet-cli/Lobby)[![Build Status](https://travis-ci.org/CruiseDevice/twweet-cli.svg?branch=master)](https://travis-ci.org/CruiseDevice/twweet-cli)
 
 ## Install
 
