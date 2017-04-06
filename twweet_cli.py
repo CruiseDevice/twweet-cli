@@ -75,8 +75,39 @@ def editapi():
     conn.close
     main()
 
+#function to download the tweets of a particular hashtag
+def get_tweets_of_hashtag(hash_tag):
+    all_tweets = []
+    new_tweets = []
+    print "Please be patient while we download the tweets"
+
+    api = get_api(cfg)
+    new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
+
+    while new_tweets:
+        for tweet in new_tweets:
+            all_tweets.append(tweet.text.encode("utf-8"))
+            #max_id will be id of last tweet when loop completes. shitty wasy of doing things
+            max_id = tweet.id
+
+        print "We have got %s tweets so far" % (len(all_tweets))
+        new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
+
+        if (len(all_tweets)) >= 1000:
+            break
+
+    with open('%s.csv'%hash_tag, 'wb') as f:
+        writer = csv.writer(f)
+        for tweet in all_tweets:
+            if tweet:
+                writer.writerow([tweet])
+
+    print "1000 tweets have been saved to %s.csv" % hash_tag
+
+
+
 def main():
-  
+
     if os.path.isfile(db):
        conn = sqlite3.connect(db)
        c=conn.cursor()
@@ -87,17 +118,17 @@ def main():
        cfg["access_token"] = str(cfgdb[2])
        cfg["access_token_secret"] = str(cfgdb[3])
     else:
-       conn = sqlite3.connect(db) 
+       conn = sqlite3.connect(db)
        c=conn.cursor()
        c.execute('''CREATE TABLE ApiDetails
-                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''') 
-       cfg["consumer_key"] = raw_input('Enter your Consumer Key: ') 
+                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
+       cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
        cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
        cfg["access_token"] = raw_input('Enter your Access Token: ')
        cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
-       c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)  
+       c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
        conn.commit()
-       conn.close       
+       conn.close
     api = get_api(cfg)
 
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
@@ -106,11 +137,13 @@ def main():
 	api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
-        get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+        option = raw_input('1.Get tweets of a user \n2.Get tweets of particular hashtag \n:')
+        if option == '1':
+            get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+        elif option == '2':
+            get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
     elif option == 'edit':
         editapi()
-       
+
 if __name__ == "__main__":
   main()
-
-			
