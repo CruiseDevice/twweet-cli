@@ -1,0 +1,10 @@
+language: python
+python:
+  - "2.7"
+cache: pip
+install:
+  - pip install --upgrade pyflakes
+script:
+  - pyflakes setup.py
+  - pyflakes twweet_cli.py
+  - python setup.py install

@@ -14,7 +14,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='twweet-cli',
+    name='twweet_cli',
     version='1.0.0',
 
     description='Tweet right from your cli without even opening your browser.',
@@ -41,6 +41,10 @@ setup(
          'tweepy',
      ],
     
-     py_modules=["twweet-cli"],
-
+     py_modules=["twweet_cli"],
+     entry_points={
+        'console_scripts': [
+            'twweet-cli = twweet_cli:main',
+        ],
+     }
 )
