@@ -11,14 +11,16 @@ Tweet right from your cli without even opening your browser.
 
 `$ git clone https://github.com/CruiseDevice/twweet-cli.git`
 
+**Navigate to the tweet-cli folder**
+
 `$ cd twweet-cli`
 
-Now run setup.py file.
+**Now run setup.py file.**
 
 `$ python setup.py install`
 
-Run the application
+**Run the application**
 
 `$ python -m twweet-cli`
 
-**__Note: Requires Python 2.7__**
+**_Note: Requires Python 2.7_**
