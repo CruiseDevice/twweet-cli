@@ -21,4 +21,4 @@ Run the application
 
 `$ python -m twweet-cli`
 
-Note: Needs Python 2.7
+**__Note: Requires Python 2.7__**
