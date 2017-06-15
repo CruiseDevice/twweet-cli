@@ -2,7 +2,7 @@ import sqlite3
 import tweepy
 import os
 import csv
-
+import json
 # Twitter API credentials
 cfg = {
    "consumer_key"        : "",
@@ -116,6 +116,16 @@ def get_trending_topics():
     for item in trends:
         print item['name']
 
+def process_or_store(tweet):
+    print(json.dumps(tweet))
+
+def readTimeLine(api):
+    for status in tweepy.Cursor(api.home_timeline).items(10):
+        # process a single status
+        # print(status.text)
+        process_or_store(status._json)
+
+
 def main():
 
     if os.path.isfile(db):
@@ -147,13 +157,15 @@ def main():
 	api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
-        option = raw_input('1.Get tweets of a user \n2.Get tweets of particular hashtag \n3.Get trending topics\n:')
+        option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n')
         if option == '1':
             get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
             get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
         elif option == '3':
             get_trending_topics()
+        elif option == '4':
+            readTimeLine(api)
     elif option == 'edit':
         editapi()
 
