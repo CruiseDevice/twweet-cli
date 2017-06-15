@@ -129,6 +129,10 @@ def getFollowersList(api):
     for friend in tweepy.Cursor(api.user_timeline).items(10):
         process_or_store(friend._json)
 
+def getTweets(api):
+    for tweet in tweepy.Cursor(api.user_timeline).items(10):
+        process_or_store(tweet._json)
+
 
 def main():
 
@@ -161,7 +165,7 @@ def main():
 	api.update_status(status=tweet)
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
-        option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list')
+        option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list\n6.Get your tweets')
         if option == '1':
             get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
@@ -172,6 +176,8 @@ def main():
             readTimeLine(api)
         elif option == '5':
             getFollowersList(api)
+        elif option == '6':
+            getTweets(api)
     elif option == 'edit':
         editapi()
 
