@@ -136,7 +136,7 @@ def getTweets(api):
 
 def main():
 
-    if os.path.isfile(db):
+    if os.path.isfile(db) and os.path.getsize(db) > 0:
        conn = sqlite3.connect(db)
        c=conn.cursor()
        c.execute("SELECT * FROM ApiDetails")
