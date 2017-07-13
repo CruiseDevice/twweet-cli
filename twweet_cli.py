@@ -3,13 +3,10 @@ import tweepy
 import os
 import csv
 import json
+
 # Twitter API credentials
-cfg = {
-   "consumer_key"        : "",
-   "consumer_secret"     : "",
-   "access_token"        : "",
-   "access_token_secret" : ""
-   }
+cfg = {}
+
 db = './TwtApi.db'
 
 def get_api(cfg):
@@ -72,7 +69,7 @@ def editapi():
     cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
     c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
     conn.commit()
-    conn.close
+    conn.close()
     main()
 
 #function to download the tweets of a particular hashtag
@@ -137,26 +134,30 @@ def getTweets(api):
 def main():
 
     if os.path.isfile(db):
-       conn = sqlite3.connect(db)
-       c=conn.cursor()
-       c.execute("SELECT * FROM ApiDetails")
-       cfgdb = list(c.fetchone())
-       cfg["consumer_key"] = str(cfgdb[0])
-       cfg["consumer_secret"] = str(cfgdb[1])
-       cfg["access_token"] = str(cfgdb[2])
-       cfg["access_token_secret"] = str(cfgdb[3])
+        conn = sqlite3.connect(db)
+        c=conn.cursor()
+        c.execute("SELECT * FROM ApiDetails")
+        results = c.fetchone()
+        if not results:
+            editapi()
+        else:
+            cfgdb = results
+            cfg["consumer_key"] = str(cfgdb[0])
+            cfg["consumer_secret"] = str(cfgdb[1])
+            cfg["access_token"] = str(cfgdb[2])
+            cfg["access_token_secret"] = str(cfgdb[3])
     else:
-       conn = sqlite3.connect(db)
-       c=conn.cursor()
-       c.execute('''CREATE TABLE ApiDetails
-                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
-       cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
-       cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
-       cfg["access_token"] = raw_input('Enter your Access Token: ')
-       cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
-       c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
-       conn.commit()
-       conn.close
+        conn = sqlite3.connect(db)
+        c=conn.cursor()
+        c.execute('''CREATE TABLE ApiDetails
+                     (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
+        cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
+        cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
+        cfg["access_token"] = raw_input('Enter your Access Token: ')
+        cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
+        c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
+        conn.commit()
+        conn.close()
     api = get_api(cfg)
 
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
@@ -182,4 +183,4 @@ def main():
         editapi()
 
 if __name__ == "__main__":
-  main()
+    main()

@@ -19,6 +19,15 @@ Tweet right from your cli without even opening your browser.
 
 `$ python setup.py install`
 
+**Create a Twitter "App"**
+
+Log in to https://apps.twitter.com/ to create a new app and generate your OAuth credentials:
+
+* consumer_key
+* consumer_secret
+* access_token
+* access\_token\_secret
+
 **Run the application**
 
 `$ python -m twweet-cli`
