@@ -7,10 +7,10 @@ import sys
 
 # Twitter API credentials
 #setting up twitter bot authentication
-consumer_key = 'mRR4yCveKOe4Ns2vUhDCTzzHE'
-consumer_secret = 'HYZr9wBY59D8NuWEexXXx0Y6teWMZOBEeqE1OilMMzpkQiVEc2'
-access_token = '3183403662-0dNmdWX0xFUD7qahvlAp43vxiLvZkeQbqWpECI4'
-access_token_secret = 'n8GynaMJLhe04ZXU7Wo8jSjF6U5GMlK7qxjGA4UN4OKKv'
+consumer_key = '#'
+consumer_secret = '#'
+access_token = '#'
+access_token_secret = '#'
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
