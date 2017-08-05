@@ -3,11 +3,55 @@ import tweepy
 import os
 import csv
 import json
+import sys
 
 # Twitter API credentials
-cfg = {}
+#setting up twitter bot authentication
+consumer_key = 'mRR4yCveKOe4Ns2vUhDCTzzHE'
+consumer_secret = 'HYZr9wBY59D8NuWEexXXx0Y6teWMZOBEeqE1OilMMzpkQiVEc2'
+access_token = '3183403662-0dNmdWX0xFUD7qahvlAp43vxiLvZkeQbqWpECI4'
+access_token_secret = 'n8GynaMJLhe04ZXU7Wo8jSjF6U5GMlK7qxjGA4UN4OKKv'
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
 
+#Creating an instance to connect to the twitter api
+api = tweepy.API(auth)
+cfg = {}
 db = './TwtApi.db'
+
+#Change system encoding to utf-8
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
+
+
+class StreamListener(tweepy.StreamListener):
+    def on_status(self, status):
+        print '@{} => {}'.format(status.user.screen_name, status.text)
+
+    def on_error(self, status_code):
+        print 'AN ERROR'
+    #   read the docs and handle different errors
+
+
+# authorise the stream listener
+def authStreamer():
+    streamListenerOB = StreamListener()
+    stream = tweepy.Stream(auth=api.auth, listener=streamListenerOB)
+    return stream
+
+#Listen for tweets on the current users timeline
+def streemYourTL():
+    stream = authStreamer()
+    stream.userstream(_with='following', async=True)
+
+#listen for tweets containing a specific word or hashtag (a phrase might work too)
+def streemWordOrHashtag(wordsList):
+    stream = authStreamer()
+    stream.filter(track=wordsList, async=True)
+
+
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -17,7 +61,7 @@ def get_api(cfg):
     return tweepy.API(auth)
 
 def get_all_tweets(screen_name):
-    api = get_api(cfg)
+#    api = get_api(cfg)
 
     #initialize a list to hold all the tweepy Tweets
     alltweets = []
@@ -101,10 +145,9 @@ def get_tweets_of_hashtag(hash_tag):
 
     print "1000 tweets have been saved to %s.csv" % hash_tag
 
-
 def get_trending_topics():
 
-    api = get_api(cfg)
+#    api = get_api(cfg)
 
     trends1 = api.trends_place(1) #1 for worldwide
     data = trends1[0]
@@ -120,7 +163,9 @@ def readTimeLine(api):
     for status in tweepy.Cursor(api.home_timeline).items(10):
         # process a single status
         # print(status.text)
-        process_or_store(status._json)
+
+        #lets start by making output user friendly
+        process_or_store(status._json['text'])
 
 def getFollowersList(api):
     for friend in tweepy.Cursor(api.user_timeline).items(10):
@@ -131,8 +176,7 @@ def getTweets(api):
         process_or_store(tweet._json)
 
 
-def main():
-
+def setupStuffIThinkIDontNeed():
     if os.path.isfile(db):
         conn = sqlite3.connect(db)
         c=conn.cursor()
@@ -160,11 +204,13 @@ def main():
         conn.close()
     api = get_api(cfg)
 
+
+def main():
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
         tweet = raw_input('Enter your twweet\n')
-	api.update_status(status=tweet)
-        # Yes, tweet is called 'status' rather confusing
+        api.update_status(status=tweet)
+    # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
         option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list\n6.Get your tweets')
         if option == '1':
@@ -183,4 +229,5 @@ def main():
         editapi()
 
 if __name__ == "__main__":
-    main()
+    streemWordOrHashtag(['#obamaday', '#KasiVibeFestival'])
+    #main()
