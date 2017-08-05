@@ -113,9 +113,9 @@ def getTweets(api):
         process_or_store(tweet._json)
 
 def getCreds():
-    if not os.path.isfile('creds.json'):
+    if not os.path.isfile('data/creds.json'):
         createCreds()
-    with open('creds.json') as json_file:
+    with open('data/creds.json') as json_file:
         return json.load(json_file)
     
 def createCreds():
@@ -127,13 +127,13 @@ def createCreds():
     "consumer_secret": cs, 
     "access_token": at, 
     "access_token_secret": ats}
-    with open("creds.json", "w") as outfile:
+    with open("data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
 
 
 
 def main():
-
+    global cfg
     cfg = getCreds()
     api = get_api(cfg)
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
