@@ -7,10 +7,10 @@ import sys
 
 # Twitter API credentials
 #setting up twitter bot authentication
-consumer_key = '#'
-consumer_secret = '#'
-access_token = '#'
-access_token_secret = '#'
+consumer_key = 'mRR4yCveKOe4Ns2vUhDCTzzHE'
+consumer_secret = 'HYZr9wBY59D8NuWEexXXx0Y6teWMZOBEeqE1OilMMzpkQiVEc2'
+access_token = '3183403662-0dNmdWX0xFUD7qahvlAp43vxiLvZkeQbqWpECI4'
+access_token_secret = 'n8GynaMJLhe04ZXU7Wo8jSjF6U5GMlK7qxjGA4UN4OKKv'
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
@@ -48,6 +48,7 @@ def streemYourTL():
 
 #listen for tweets containing a specific word or hashtag (a phrase might work too)
 def streemWordOrHashtag(wordsList):
+    wordsList = wordsList.split(" ")
     stream = authStreamer()
     stream.filter(track=wordsList, async=True)
 
@@ -176,7 +177,7 @@ def getTweets(api):
         process_or_store(tweet._json)
 
 
-def setupStuffIThinkIDontNeed():
+def setupStuffICanLiveWithOut():
     if os.path.isfile(db):
         conn = sqlite3.connect(db)
         c=conn.cursor()
@@ -204,7 +205,12 @@ def setupStuffIThinkIDontNeed():
         conn.close()
     api = get_api(cfg)
 
+def deco(func):
+    func()
+    print "DONE \n"
+    return func
 
+@deco
 def main():
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
@@ -216,11 +222,13 @@ def main():
         if option == '1':
             get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
-            get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
+            streemWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
+            # get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
         elif option == '3':
             get_trending_topics()
         elif option == '4':
-            readTimeLine(api)
+            streemYourTL()
+            #readTimeLine(api)
         elif option == '5':
             getFollowersList(api)
         elif option == '6':
@@ -228,6 +236,7 @@ def main():
     elif option == 'edit':
         editapi()
 
+
 if __name__ == "__main__":
-    streemWordOrHashtag(['#obamaday', '#KasiVibeFestival'])
-    #main()
+    #streemWordOrHashtag(['#obamaday', '#KasiVibeFestival'])
+    main()
