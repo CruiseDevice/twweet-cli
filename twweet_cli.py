@@ -2,6 +2,7 @@ import tweepy
 import os
 import csv
 import json
+import errno
 
 # Twitter API credentials
 cfg = {}
@@ -117,23 +118,28 @@ def getCreds():
         createCreds()
     with open('data/creds.json') as json_file:
         return json.load(json_file)
-    
+
 def createCreds():
     ck = raw_input('Enter your Consumer Key: ').strip()
     cs = raw_input('Enter your Consumer Secret: ').strip()
     at = raw_input('Enter your Access Token: ').strip()
     ats = raw_input('Enter your Access Token Secret: ').strip()
-    jsondata= {"consumer_key": ck, 
-    "consumer_secret": cs, 
-    "access_token": at, 
+    jsondata= {"consumer_key": ck,
+    "consumer_secret": cs,
+    "access_token": at,
     "access_token_secret": ats}
     with open("data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
 
-
+def check_data_dir_exists():
+    try:
+        os.makedirs('./data')
+    except OSError:
+        pass
 
 def main():
     global cfg
+    check_data_dir_exists()
     cfg = getCreds()
     api = get_api(cfg)
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
