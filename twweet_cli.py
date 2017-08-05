@@ -7,10 +7,10 @@ import sys
 
 # Twitter API credentials
 #setting up twitter bot authentication
-consumer_key = '#'
-consumer_secret = '#'
-access_token = '#'
-access_token_secret = '#'
+consumer_key = 'mRR4yCveKOe4Ns2vUhDCTzzHE'
+consumer_secret = 'HYZr9wBY59D8NuWEexXXx0Y6teWMZOBEeqE1OilMMzpkQiVEc2'
+access_token = '3183403662-0dNmdWX0xFUD7qahvlAp43vxiLvZkeQbqWpECI4'
+access_token_secret = 'n8GynaMJLhe04ZXU7Wo8jSjF6U5GMlK7qxjGA4UN4OKKv'
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
@@ -27,6 +27,7 @@ sys.setdefaultencoding('utf-8')
 
 
 class StreamListener(tweepy.StreamListener):
+    # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
     def on_status(self, status):
         print '@{} => {}'.format(status.user.screen_name, status.text)
 
@@ -34,6 +35,52 @@ class StreamListener(tweepy.StreamListener):
         print 'AN ERROR'
     #   read the docs and handle different errors
 
+    def keep_alive(self):
+        """Called when a keep-alive arrived"""
+        return
+
+    def on_exception(self, exception):
+        """Called when an unhandled exception occurs."""
+        return
+
+    def on_delete(self, status_id, user_id):
+        """Called when a delete notice arrives for a status"""
+        return
+
+    def on_event(self, status):
+        """Called when a new event arrives"""
+        return
+
+    def on_direct_message(self, status):
+        """Called when a new direct message arrives"""
+        return
+
+    def on_friends(self, friends):
+        """Called when a friends list arrives.
+
+        friends is a list that contains user_id
+        """
+        return
+
+    def on_limit(self, track):
+        """Called when a limitation notice arrives"""
+        return
+
+    def on_timeout(self):
+        """Called when stream connection times out"""
+        return
+
+    def on_disconnect(self, notice):
+        """Called when twitter sends a disconnect notice
+
+        Disconnect codes are listed here:
+        https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
+        """
+        return
+
+    def on_warning(self, notice):
+        """Called when a disconnection warning message arrives"""
+        return
 
 # authorise the stream listener
 def authStreamer():
@@ -42,17 +89,20 @@ def authStreamer():
     return stream
 
 #Listen for tweets on the current users timeline
-def streemYourTL():
+def streamYourTL():
     stream = authStreamer()
     stream.userstream(_with='following', async=True)
 
 #listen for tweets containing a specific word or hashtag (a phrase might work too)
-def streemWordOrHashtag(wordsList):
+def streamWordOrHashtag(wordsList):
     wordsList = wordsList.split(" ")
     stream = authStreamer()
     stream.filter(track=wordsList, async=True)
 
-
+def decoMain(func):
+    func()
+    print "DONE \n"
+    return func
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -205,12 +255,7 @@ def setupStuffICanLiveWithOut():
         conn.close()
     api = get_api(cfg)
 
-def deco(func):
-    func()
-    print "DONE \n"
-    return func
-
-@deco
+@decoMain
 def main():
     option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
     if option == 'twweet':
@@ -222,12 +267,12 @@ def main():
         if option == '1':
             get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
-            streemWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
+            streamWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
             # get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
         elif option == '3':
             get_trending_topics()
         elif option == '4':
-            streemYourTL()
+            streamYourTL()
             #readTimeLine(api)
         elif option == '5':
             getFollowersList(api)
