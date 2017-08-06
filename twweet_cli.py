@@ -1,21 +1,18 @@
-import sqlite3
 import tweepy
 import os
 import csv
 import json
 import sys
+import sqlite3
+import errno
+
 
 # Twitter API credentials
 #setting up twitter bot authentication
-consumer_key = '#'
-consumer_secret = '#'
-access_token = '#'
-access_token_secret = '#'
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+from auth import api
 
 #Creating an instance to connect to the twitter api
-api = tweepy.API(auth)
+api = api
 cfg = {}
 db = './TwtApi.db'
 
@@ -28,11 +25,14 @@ sys.setdefaultencoding('utf-8')
 
 class StreamListener(tweepy.StreamListener):
     # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
+    def __init__(self, time_limit=60):
+        super(StreamListener, self).__init__(api)
+
     def on_status(self, status):
-        print '@{} => {}'.format(status.user.screen_name, status.text)
+        print '@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " "))
 
     def on_error(self, status_code):
-        print 'AN ERROR'
+        print 'AN ERROR: {}'.format(status_code)
     #   read the docs and handle different errors
 
     def keep_alive(self):
@@ -99,11 +99,6 @@ def streamWordOrHashtag(wordsList):
     stream = authStreamer()
     stream.filter(track=wordsList, async=True)
 
-def decoMain(func):
-    func()
-    print "DONE \n"
-    return func
-
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
 
@@ -151,21 +146,6 @@ def get_all_tweets(screen_name):
         writer.writerows(outtweets)
 
     pass
-
-def editapi():
-    os.remove(db)
-    conn = sqlite3.connect(db)
-    c=conn.cursor()
-    c.execute('''CREATE TABLE ApiDetails
-                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
-    cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
-    cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
-    cfg["access_token"] = raw_input('Enter your Access Token: ')
-    cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
-    c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
-    conn.commit()
-    conn.close()
-    main()
 
 #function to download the tweets of a particular hashtag
 def get_tweets_of_hashtag(hash_tag):
@@ -226,14 +206,44 @@ def getTweets(api):
     for tweet in tweepy.Cursor(api.user_timeline).items(10):
         process_or_store(tweet._json)
 
+def getCreds():
+    if not os.path.isfile('data/creds.json'):
+        createCreds()
+    with open('data/creds.json') as json_file:
+        return json.load(json_file)
+
+def createCreds():
+    ck = raw_input('Enter your Consumer Key: ').strip()
+    cs = raw_input('Enter your Consumer Secret: ').strip()
+    at = raw_input('Enter your Access Token: ').strip()
+    ats = raw_input('Enter your Access Token Secret: ').strip()
+    jsondata= {"consumer_key": ck,
+    "consumer_secret": cs,
+    "access_token": at,
+    "access_token_secret": ats}
+    with open("data/creds.json", "w") as outfile:
+        json.dump(jsondata, outfile)
+
+def check_data_dir_exists():
+    try:
+        os.makedirs('./data')
+    except OSError:
+        pass
+
 def setupStuffICanLiveWithOut():
+    global cfg
+    check_data_dir_exists()
+    cfg = getCreds()
+    api = get_api(cfg)
+
     if os.path.isfile(db):
         conn = sqlite3.connect(db)
         c=conn.cursor()
         c.execute("SELECT * FROM ApiDetails")
         results = c.fetchone()
         if not results:
-            editapi()
+           # editapi()
+            pass
         else:
             cfgdb = results
             cfg["consumer_key"] = str(cfgdb[0])
@@ -253,6 +263,11 @@ def setupStuffICanLiveWithOut():
         conn.commit()
         conn.close()
     api = get_api(cfg)
+
+def decoMain(func):
+    func()
+    print "DONE \n"
+    return func
 
 @decoMain
 def main():
@@ -278,8 +293,7 @@ def main():
         elif option == '6':
             getTweets(api)
     elif option == 'edit':
-        editapi()
-
+        createCreds()
 if __name__ == "__main__":
     #streemWordOrHashtag(['#obamaday', '#KasiVibeFestival'])
     main()
