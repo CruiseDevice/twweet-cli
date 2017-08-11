@@ -99,7 +99,7 @@ def get_trending_topics():
         print item['name']
 
 def process_or_store(tweet):
-    print(json.dumps(tweet))
+    print(json.dumps(tweet,indent=1))
 
 def readTimeLine(api):
     for status in tweepy.Cursor(api.home_timeline).items(10):
