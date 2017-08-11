@@ -3,9 +3,11 @@ import os
 import csv
 import json
 import errno
+from os.path import expanduser
 
 # Twitter API credentials
 cfg = {}
+home = expanduser("~")
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -114,9 +116,9 @@ def getTweets(api):
         process_or_store(tweet._json)
 
 def getCreds():
-    if not os.path.isfile('data/creds.json'):
+    if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
         createCreds()
-    with open('data/creds.json') as json_file:
+    with open(home+'/.twweet-cli/data/creds.json') as json_file:
         return json.load(json_file)
 
 def createCreds():
@@ -128,12 +130,12 @@ def createCreds():
     "consumer_secret": cs,
     "access_token": at,
     "access_token_secret": ats}
-    with open("data/creds.json", "w") as outfile:
+    with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
 
 def check_data_dir_exists():
     try:
-        os.makedirs('./data')
+        os.makedirs(home+'/.twweet-cli/data')
     except OSError:
         pass
 
