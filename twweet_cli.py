@@ -135,9 +135,12 @@ def createCreds():
 
 def check_data_dir_exists():
     try:
-        os.makedirs(home+'/.twweet-cli/data')
+        original_umask = os.umask(0)
+        os.makedirs(home+'/.twweet-cli/data',0777)
     except OSError:
         pass
+    finally:
+        os.umask(original_umask)
 
 def main():
     global cfg
