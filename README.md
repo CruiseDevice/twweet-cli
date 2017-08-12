@@ -9,6 +9,12 @@ Tweet right from your cli without even opening your browser.
 
 ### Build from Source
 
+**Install the dependencies**
+
+`$ pip install tweepy`
+
+**Clone the source**
+
 `$ git clone https://github.com/CruiseDevice/twweet-cli.git`
 
 **Navigate to the tweet-cli folder**
