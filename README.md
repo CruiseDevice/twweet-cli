@@ -9,6 +9,12 @@ Tweet right from your cli without even opening your browser.
 
 ### Build from Source
 
+**Install the dependencies**
+
+`$ pip install tweepy`
+
+**Clone the source**
+
 `$ git clone https://github.com/CruiseDevice/twweet-cli.git`
 
 **Navigate to the tweet-cli folder**
@@ -17,10 +23,19 @@ Tweet right from your cli without even opening your browser.
 
 **Now run setup.py file.**
 
-`$ python setup.py install`
+`$ sudo python setup.py install`
+
+**Create a Twitter "App"**
+
+Log in to https://apps.twitter.com/ to create a new app and generate your OAuth credentials:
+
+* consumer_key
+* consumer_secret
+* access_token
+* access\_token\_secret
 
 **Run the application**
 
-`$ python -m twweet-cli`
+`$ twweet-cli`
 
 **_Note: Requires Python 2.7_**

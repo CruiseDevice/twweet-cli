@@ -1,16 +1,13 @@
-import sqlite3
 import tweepy
 import os
 import csv
 import json
+import errno
+from os.path import expanduser
+
 # Twitter API credentials
-cfg = {
-   "consumer_key"        : "",
-   "consumer_secret"     : "",
-   "access_token"        : "",
-   "access_token_secret" : ""
-   }
-db = './TwtApi.db'
+cfg = {}
+home = expanduser("~")
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -67,21 +64,6 @@ def get_all_tweets(screen_name):
 
     pass
 
-def editapi():
-    os.remove(db)
-    conn = sqlite3.connect(db)
-    c=conn.cursor()
-    c.execute('''CREATE TABLE ApiDetails
-                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
-    cfg["consumer_key"] = input('Enter your Consumer Key: ')
-    cfg["consumer_secret"] = input('Enter your Consumer Secret: ')
-    cfg["access_token"] = input('Enter your Access Token: ')
-    cfg["access_token_secret"] = input('Enter your Access Token Secret: ')
-    c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
-    conn.commit()
-    conn.close
-    main()
-
 #function to download the tweets of a particular hashtag
 def get_tweets_of_hashtag(hash_tag):
     all_tweets = []
@@ -122,7 +104,7 @@ def get_trending_topics():
         print(item['name'])
 
 def process_or_store(tweet):
-    print(json.dumps(tweet))
+    print(json.dumps(tweet,indent=1))
 
 def readTimeLine(api):
     for status in tweepy.Cursor(api.home_timeline).items(10):
@@ -135,32 +117,44 @@ def getFollowersList(api):
         process_or_store(friend._json)
 
 
+def getTweets(api):
+    for tweet in tweepy.Cursor(api.user_timeline).items(10):
+        process_or_store(tweet._json)
+
+def getCreds():
+    if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
+        createCreds()
+    with open(home+'/.twweet-cli/data/creds.json') as json_file:
+        return json.load(json_file)
+
+def createCreds():
+    ck = raw_input('Enter your Consumer Key: ').strip()
+    cs = raw_input('Enter your Consumer Secret: ').strip()
+    at = raw_input('Enter your Access Token: ').strip()
+    ats = raw_input('Enter your Access Token Secret: ').strip()
+    jsondata= {"consumer_key": ck,
+    "consumer_secret": cs,
+    "access_token": at,
+    "access_token_secret": ats}
+    with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
+        json.dump(jsondata, outfile)
+
+def check_data_dir_exists():
+    try:
+        original_umask = os.umask(0)
+        os.makedirs(home+'/.twweet-cli/data',0777)
+    except OSError:
+        pass
+    finally:
+        os.umask(original_umask)
+
 def main():
-
-#    if os.path.isfile(db):
-#       conn = sqlite3.connect(db)
-#       c=conn.cursor()
-#       c.execute("SELECT * FROM ApiDetails")
-#       cfgdb = list(c.fetchone())
-#       cfg["consumer_key"] = str(cfgdb[0])
-#       cfg["consumer_secret"] = str(cfgdb[1])
-#       cfg["access_token"] = str(cfgdb[2])
-#       cfg["access_token_secret"] = str(cfgdb[3])
-#    else:
-#       conn = sqlite3.connect(db)
-#       c=conn.cursor()
-#       c.execute('''CREATE TABLE ApiDetails
-#                    (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
-#       cfg["consumer_key"] = input('Enter your Consumer Key: ')
-#       cfg["consumer_secret"] = input('Enter your Consumer Secret: ')
-#       cfg["access_token"] = input('Enter your Access Token: ')
-#       cfg["access_token_secret"] = input('Enter your Access Token Secret: ')
-#       c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
-#       conn.commit()
-#       conn.close'''
+    global cfg
+    check_data_dir_exists()
+    cfg = getCreds()
     api = get_api(cfg)
-
     option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
+
     if option == 'twweet':
         tweet = input('Enter your twweet\n')
         api.update_status(status=tweet)
@@ -179,7 +173,7 @@ def main():
         elif option == '5':
             getFollowersList(api)
     elif option == 'edit':
-        editapi()
+        createCreds()
 
 if __name__ == "__main__":
-  main()
+    main()
