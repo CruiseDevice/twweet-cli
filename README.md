@@ -23,7 +23,7 @@ Tweet right from your cli without even opening your browser.
 
 **Now run setup.py file.**
 
-`$ python setup.py install`
+`$ sudo python setup.py install`
 
 **Create a Twitter "App"**
 
@@ -36,6 +36,6 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 
 **Run the application**
 
-`$ python -m twweet-cli`
+`$ twweet-cli`
 
 **_Note: Requires Python 2.7_**
