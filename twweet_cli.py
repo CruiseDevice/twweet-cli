@@ -34,10 +34,10 @@ def get_all_tweets(screen_name):
     #keep grabbing tweets until there are no tweets left to grab
     #while respecting the api's rate limiting to avoid 429s
     #probably should lower this to be used a few times in a 15 minute window
-    last=0 
+    last=0
     for iter in range(0,899):
         print("getting tweets before {}".format(oldest))
-        
+
         #all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name, count = 200, max_id = oldest)
 
@@ -142,7 +142,7 @@ def createCreds():
 def check_data_dir_exists():
     try:
         original_umask = os.umask(0)
-        os.makedirs(home+'/.twweet-cli/data',0777)
+        os.makedirs(home+'/.twweet-cli/data')
     except OSError:
         pass
     finally:
@@ -161,7 +161,6 @@ def main():
         # Yes, tweet is called 'status' rather confusing
     elif option == 'get':
         option = input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list\n6.Get your tweets')
-        option = input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list')
         if option == '1':
             get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
