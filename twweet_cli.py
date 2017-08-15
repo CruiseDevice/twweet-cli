@@ -128,16 +128,20 @@ def getCreds():
         return json.load(json_file)
 
 def createCreds():
-    ck = raw_input('Enter your Consumer Key: ').strip()
-    cs = raw_input('Enter your Consumer Secret: ').strip()
-    at = raw_input('Enter your Access Token: ').strip()
-    ats = raw_input('Enter your Access Token Secret: ').strip()
-    jsondata= {"consumer_key": ck,
-    "consumer_secret": cs,
-    "access_token": at,
-    "access_token_secret": ats}
-    with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
-        json.dump(jsondata, outfile)
+    try:
+        ck = raw_input('Enter your Consumer Key: ').strip()
+        cs = raw_input('Enter your Consumer Secret: ').strip()
+        at = raw_input('Enter your Access Token: ').strip()
+        ats = raw_input('Enter your Access Token Secret: ').strip()
+        jsondata= {"consumer_key": ck,
+        "consumer_secret": cs,
+        "access_token": at,
+        "access_token_secret": ats}
+        with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
+            json.dump(jsondata, outfile)
+    except KeyError:
+        sys.stderr.write("TWITTER_* environment variables not set\n")
+        sys.exit(1)
 
 def check_data_dir_exists():
     try:
