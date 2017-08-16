@@ -72,6 +72,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
          'tweepy',
+         'pyyaml'
      ],
 
      py_modules=["twweet_cli"],
