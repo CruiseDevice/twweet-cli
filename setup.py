@@ -21,10 +21,10 @@ class TwtApiDetails(install):
 def check_data_dir_exists():
     try:
         original_umask = os.umask(0)
-        os.makedirs(home+'/.twweet-cli/data',0777)
+        os.makedirs(home+'/.twweet-cli/data')
     except OSError:
         print("Cannot create data dir the installation cannot continue..")
-	exit()
+        exit()
     finally:
         os.umask(original_umask)
 
