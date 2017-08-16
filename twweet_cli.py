@@ -107,6 +107,7 @@ def process_or_store(tweet):
     print(json.dumps(tweet,indent=1))
 
 def readTimeLine(api):
+    # loop through the first ten items of your home timeline
     for status in tweepy.Cursor(api.home_timeline).items(10):
         # process a single status
         # print(status.text)
