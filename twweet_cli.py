@@ -63,12 +63,6 @@ def get_all_tweets(screen_name):
     global TweetsStorage
     TweetsStorage=str(os.getcwd()+TweetsStorage)
     os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
-#    if not os.path.exists(os.path.dirname(TweetsStorage)):
-#        try:
-#            os.makedirs(os.path.dirname(TweetsStorage))
-#        except OSError as exc: # Guard against race condition
-#            if exc.errno != errno.EEXIST:
-#                raise
     fn=str(TweetsStorage+screen_name+'_tweets.csv')
     with open(fn,'w') as f:
         writer = csv.writer(f)
