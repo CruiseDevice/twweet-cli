@@ -3,7 +3,6 @@ import os
 import csv
 import json
 import errno
-import sys
 from os.path import expanduser
 from ConfigReader import ConfigurationReader
 
@@ -169,39 +168,26 @@ def main():
     check_data_dir_exists()
     cfg = getCreds()
     api = get_api(cfg)
-    print('Press 99 to quit the Application')
-    while True:
-        option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
-        if option =='99':
-            break
-        if option == 'twweet':
-            tweet = input('Enter your twweet\n')
-            api.update_status(status=tweet)
-            # Yes, tweet is called 'status' rather confusing
-        elif option == 'get':
-            while True:
-                option = input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: ')
-                if option =='99':
-                    sys.exit(0)
-                if option == '66':
-                    print('\n\n')
-                    break
-                if option == '1':
-                    get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
-                elif option == '2':
-                    get_tweets_of_hashtag(input('Enter the hashtag : '))
-                elif option == '3':
-                    get_trending_topics()
-                elif option == '4':
-                    readTimeLine(api)
-                elif option == '5':
-                    getFollowersList(api)
-                else :
-                    print('please choose any of the above options\n \n')
-        elif option == 'edit':
-            createCreds()
-        else :
-            print('Please choose any of the above options \n \n')
+    option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
+
+    if option == 'twweet':
+        tweet = input('Enter your twweet\n')
+        api.update_status(status=tweet)
+        # Yes, tweet is called 'status' rather confusing
+    elif option == 'get':
+        option = input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list\n6.Get your tweets')
+        if option == '1':
+            get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
+        elif option == '2':
+            get_tweets_of_hashtag(input('Enter the hashtag : '))
+        elif option == '3':
+            get_trending_topics()
+        elif option == '4':
+            readTimeLine(api)
+        elif option == '5':
+            getFollowersList(api)
+    elif option == 'edit':
+        createCreds()
 
 if __name__ == "__main__":
     main()
