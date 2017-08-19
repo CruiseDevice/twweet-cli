@@ -4,3 +4,5 @@ dist
 build
 CruiseDevice_tweets.csv
 data/
+*.pyc
+/*

@@ -4,10 +4,14 @@ import csv
 import json
 import errno
 from os.path import expanduser
+from ConfigReader import ConfigurationReader
 
 # Twitter API credentials
 cfg = {}
 home = expanduser("~")
+Configuration=ConfigurationReader()
+TweetsStorage=Configuration.GetTweetsStorage()
+HashTagStorage=Configuration.GetTweetsStorage()
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -56,7 +60,10 @@ def get_all_tweets(screen_name):
     outtweets = [[tweet.id_str,tweet.created_at,tweet.text.encode("utf-8")]for tweet in alltweets]
 
     # write to csv
-    fn=str(screen_name+'_tweets.csv')
+    global TweetsStorage
+    TweetsStorage=str(os.getcwd()+TweetsStorage)
+    os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
+    fn=str(TweetsStorage+screen_name+'_tweets.csv')
     with open(fn,'w') as f:
         writer = csv.writer(f)
         writer.writerow(["id","created_at","text"])
@@ -82,7 +89,10 @@ def get_tweets_of_hashtag(hash_tag):
         new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
         if (len(all_tweets)) >= 1000:
             break
-    filename=str(hash_tag+'s.csv')
+    global HashTagStorage
+    HashTagStorage=str(os.getcwd()+HashTagStorage)
+    os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
+    filename=str(HashTagStorage+hash_tag+'s.csv')
     with open(filename, 'w') as f:
         writer = csv.writer(f)
         for tweet in all_tweets:
