@@ -2,26 +2,23 @@ import tweepy
 import os
 import csv
 import json
-import sys
-import sqlite3
 import errno
+import sys
+from os.path import expanduser
+from ConfigReader import ConfigurationReader
 
+#change encoding
+reload(sys)
+sys.setdefaultencoding('UTF-8')
 
 # Twitter API credentials
-#setting up twitter bot authentication
-from auth import api
-
-#Creating an instance to connect to the twitter api
-api = api
 cfg = {}
-db = './TwtApi.db'
+home = expanduser("~")
+Configuration=ConfigurationReader()
+TweetsStorage=Configuration.GetTweetsStorage()
+HashTagStorage=Configuration.GetTweetsStorage()
 
-#Change system encoding to utf-8
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-
-
+'''STREAM'''
 
 class StreamListener(tweepy.StreamListener):
     # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
@@ -99,6 +96,13 @@ def streamWordOrHashtag(wordsList):
     stream = authStreamer()
     stream.filter(track=wordsList, async=True)
 
+def decoMain(func):
+    func()
+    print "DONE \n"
+    return func
+
+'''END STREAM'''
+
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
 
@@ -107,7 +111,7 @@ def get_api(cfg):
     return tweepy.API(auth)
 
 def get_all_tweets(screen_name):
-#    api = get_api(cfg)
+    api = get_api(cfg)
 
     #initialize a list to hold all the tweepy Tweets
     alltweets = []
@@ -122,8 +126,11 @@ def get_all_tweets(screen_name):
     oldest = alltweets[-1].id - 1
 
     #keep grabbing tweets until there are no tweets left to grab
-    while len(new_tweets) > 0:
-        print "getting tweets before %s" % (oldest)
+    #while respecting the api's rate limiting to avoid 429s
+    #probably should lower this to be used a few times in a 15 minute window
+    last=0
+    for iter in range(0,899):
+        print("getting tweets before {}".format(oldest))
 
         #all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name, count = 200, max_id = oldest)
@@ -134,13 +141,20 @@ def get_all_tweets(screen_name):
         # update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
 
-        print "...%s tweets downloaded so far"%(len(alltweets))
+        print("...{} tweets downloaded so far".format(len(alltweets)))
+        if last==len(alltweets):
+            break
+        last=len(alltweets)
 
     # transform the tweepy tweets into a 2D array that will populate the csv
     outtweets = [[tweet.id_str,tweet.created_at,tweet.text.encode("utf-8")]for tweet in alltweets]
 
     # write to csv
-    with open('%s_tweets.csv' % screen_name,'wb') as f:
+    global TweetsStorage
+    TweetsStorage=str(os.getcwd()+TweetsStorage)
+    os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
+    fn=str(TweetsStorage+screen_name+'_tweets.csv')
+    with open(fn,'w') as f:
         writer = csv.writer(f)
         writer.writerow(["id","created_at","text"])
         writer.writerows(outtweets)
@@ -151,149 +165,136 @@ def get_all_tweets(screen_name):
 def get_tweets_of_hashtag(hash_tag):
     all_tweets = []
     new_tweets = []
-    print "Please be patient while we download the tweets"
+    print("Please be patient while we download the tweets")
 
     api = get_api(cfg)
-    new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
-
-    while new_tweets:
+    for i in range(0,179):
+        new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
         for tweet in new_tweets:
             all_tweets.append(tweet.text.encode("utf-8"))
             #max_id will be id of last tweet when loop completes. shitty wasy of doing things
             max_id = tweet.id
 
-        print "We have got %s tweets so far" % (len(all_tweets))
+        print("We have got {} tweets so far".format(len(all_tweets)))
         new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
-
         if (len(all_tweets)) >= 1000:
             break
-
-    with open('%s.csv'%hash_tag, 'wb') as f:
+    global HashTagStorage
+    HashTagStorage=str(os.getcwd()+HashTagStorage)
+    os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
+    filename=str(HashTagStorage+hash_tag+'s.csv')
+    with open(filename, 'w') as f:
         writer = csv.writer(f)
         for tweet in all_tweets:
             if tweet:
                 writer.writerow([tweet])
 
-    print "1000 tweets have been saved to %s.csv" % hash_tag
+    print("1000 tweets have been saved to {}.csv".format(hash_tag))
+
 
 def get_trending_topics():
 
-#    api = get_api(cfg)
+    api = get_api(cfg)
 
     trends1 = api.trends_place(1) #1 for worldwide
     data = trends1[0]
     trends = data['trends']
-    print "\nTrending topics worldwide :"
+    print("\nTrending topics worldwide :")
     for item in trends:
-        print item['name']
+        print(item['name'])
 
 def process_or_store(tweet):
-    print(json.dumps(tweet))
+    print(json.dumps(tweet,indent=1))
 
 def readTimeLine(api):
+    # loop through the first ten items of your home timeline
     for status in tweepy.Cursor(api.home_timeline).items(10):
         # process a single status
         # print(status.text)
-
-        #lets start by making output user friendly
-        process_or_store(status._json['text'])
+        process_or_store(status._json)
 
 def getFollowersList(api):
     for friend in tweepy.Cursor(api.user_timeline).items(10):
         process_or_store(friend._json)
+
 
 def getTweets(api):
     for tweet in tweepy.Cursor(api.user_timeline).items(10):
         process_or_store(tweet._json)
 
 def getCreds():
-    if not os.path.isfile('data/creds.json'):
+    if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
         createCreds()
-    with open('data/creds.json') as json_file:
+    with open(home+'/.twweet-cli/data/creds.json') as json_file:
         return json.load(json_file)
 
 def createCreds():
-    ck = raw_input('Enter your Consumer Key: ').strip()
-    cs = raw_input('Enter your Consumer Secret: ').strip()
-    at = raw_input('Enter your Access Token: ').strip()
-    ats = raw_input('Enter your Access Token Secret: ').strip()
-    jsondata= {"consumer_key": ck,
-    "consumer_secret": cs,
-    "access_token": at,
-    "access_token_secret": ats}
-    with open("data/creds.json", "w") as outfile:
-        json.dump(jsondata, outfile)
+    try:
+        ck = raw_input('Enter your Consumer Key: ').strip()
+        cs = raw_input('Enter your Consumer Secret: ').strip()
+        at = raw_input('Enter your Access Token: ').strip()
+        ats = raw_input('Enter your Access Token Secret: ').strip()
+        jsondata= {"consumer_key": ck,
+        "consumer_secret": cs,
+        "access_token": at,
+        "access_token_secret": ats}
+        with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
+            json.dump(jsondata, outfile)
+    except KeyError:
+        sys.stderr.write("TWITTER_* environment variables not set\n")
+        sys.exit(1)
 
 def check_data_dir_exists():
     try:
-        os.makedirs('./data')
+        original_umask = os.umask(0)
+        os.makedirs(home+'/.twweet-cli/data')
     except OSError:
         pass
-
-def setupStuffICanLiveWithOut():
-    global cfg
-    check_data_dir_exists()
-    cfg = getCreds()
-    api = get_api(cfg)
-
-    if os.path.isfile(db):
-        conn = sqlite3.connect(db)
-        c=conn.cursor()
-        c.execute("SELECT * FROM ApiDetails")
-        results = c.fetchone()
-        if not results:
-           # editapi()
-            pass
-        else:
-            cfgdb = results
-            cfg["consumer_key"] = str(cfgdb[0])
-            cfg["consumer_secret"] = str(cfgdb[1])
-            cfg["access_token"] = str(cfgdb[2])
-            cfg["access_token_secret"] = str(cfgdb[3])
-    else:
-        conn = sqlite3.connect(db)
-        c=conn.cursor()
-        c.execute('''CREATE TABLE ApiDetails
-                     (consumer_key text, consumer_secret text, access_token text, acccess_token_secret text)''')
-        cfg["consumer_key"] = raw_input('Enter your Consumer Key: ')
-        cfg["consumer_secret"] = raw_input('Enter your Consumer Secret: ')
-        cfg["access_token"] = raw_input('Enter your Access Token: ')
-        cfg["access_token_secret"] = raw_input('Enter your Access Token Secret: ')
-        c.execute("INSERT INTO ApiDetails VALUES (:consumer_key,:consumer_secret,:access_token,:access_token_secret)",cfg)
-        conn.commit()
-        conn.close()
-    api = get_api(cfg)
-
-def decoMain(func):
-    func()
-    print "DONE \n"
-    return func
+    finally:
+        os.umask(original_umask)
 
 @decoMain
 def main():
-    option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
-    if option == 'twweet':
-        tweet = raw_input('Enter your twweet\n')
-        api.update_status(status=tweet)
-    # Yes, tweet is called 'status' rather confusing
-    elif option == 'get':
-        option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list\n6.Get your tweets')
-        if option == '1':
-            get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
-        elif option == '2':
-            streamWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
-            # get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
-        elif option == '3':
-            get_trending_topics()
-        elif option == '4':
-            streamYourTL()
-            #readTimeLine(api)
-        elif option == '5':
-            getFollowersList(api)
-        elif option == '6':
-            getTweets(api)
-    elif option == 'edit':
-        createCreds()
+    global cfg, api
+    check_data_dir_exists()
+    cfg = getCreds()
+    api = get_api(cfg)
+    print('Press 99 to quit the Application')
+    while True:
+        option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
+        if option =='99':
+            break
+        if option == 'twweet':
+            tweet = raw_input('Enter your twweet\n')
+            api.update_status(status=tweet)
+            # Yes, tweet is called 'status' rather confusing
+        elif option == 'get':
+            while True:
+                option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: \n')
+                if option =='99':
+                    sys.exit(0)
+                if option == '66':
+                    print('\n\n')
+                    break
+                if option == '1':
+                    get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
+                elif option == '2':
+                    streamWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
+                    #get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
+                elif option == '3':
+                    get_trending_topics()
+                elif option == '4':
+                    print('\nStreaming tweets from your TimeLine...')
+                    streamYourTL()
+                    #readTimeLine(api)
+                elif option == '5':
+                    getFollowersList(api)
+                else :
+                    print('please choose any of the above options\n \n')
+        elif option == 'edit':
+            createCreds()
+        else :
+            print('Please choose any of the above options \n \n')
+
 if __name__ == "__main__":
-    #streemWordOrHashtag(['#obamaday', '#KasiVibeFestival'])
     main()

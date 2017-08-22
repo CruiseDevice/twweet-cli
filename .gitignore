@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 resources.txt
 twweet_cli.egg-info
 dist
 build
 CruiseDevice_tweets.csv
 data/
+=======
+resources.txt
+twweet_cli.egg-info
+dist
+build
+CruiseDevice_tweets.csv
+data/
+*.pyc
+/*
+>>>>>>> 10c8313e540eb655b56d73f03d1f624afd97d644
