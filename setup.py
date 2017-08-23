@@ -1,3 +1,9 @@
+"""A setuptools based setup module.
+See:
+https://packaging.python.org/en/latest/distributing.html
+https://github.com/pypa/sampleproject
+"""
+
 from setuptools.command.install import install
 from setuptools import setup, find_packages
 from codecs import open

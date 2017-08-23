@@ -7,12 +7,101 @@ import sys
 from os.path import expanduser
 from ConfigReader import ConfigurationReader
 
+#change encoding
+reload(sys)
+sys.setdefaultencoding('UTF-8')
+
 # Twitter API credentials
 cfg = {}
 home = expanduser("~")
 Configuration=ConfigurationReader()
 TweetsStorage=Configuration.GetTweetsStorage()
 HashTagStorage=Configuration.GetTweetsStorage()
+
+'''STREAM'''
+
+class StreamListener(tweepy.StreamListener):
+    # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
+    def __init__(self, time_limit=60):
+        super(StreamListener, self).__init__(api)
+
+    def on_status(self, status):
+        print '@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " "))
+
+    def on_error(self, status_code):
+        print 'AN ERROR: {}'.format(status_code)
+    #   read the docs and handle different errors
+
+    def keep_alive(self):
+        """Called when a keep-alive arrived"""
+        return
+
+    def on_exception(self, exception):
+        """Called when an unhandled exception occurs."""
+        return
+
+    def on_delete(self, status_id, user_id):
+        """Called when a delete notice arrives for a status"""
+        return
+
+    def on_event(self, status):
+        """Called when a new event arrives"""
+        return
+
+    def on_direct_message(self, status):
+        """Called when a new direct message arrives"""
+        return
+
+    def on_friends(self, friends):
+        """Called when a friends list arrives.
+
+        friends is a list that contains user_id
+        """
+        return
+
+    def on_limit(self, track):
+        """Called when a limitation notice arrives"""
+        return
+
+    def on_timeout(self):
+        """Called when stream connection times out"""
+        return
+
+    def on_disconnect(self, notice):
+        """Called when twitter sends a disconnect notice
+
+        Disconnect codes are listed here:
+        https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
+        """
+        return
+
+    def on_warning(self, notice):
+        """Called when a disconnection warning message arrives"""
+        return
+
+# authorise the stream listener
+def authStreamer():
+    streamListenerOB = StreamListener()
+    stream = tweepy.Stream(auth=api.auth, listener=streamListenerOB)
+    return stream
+
+#Listen for tweets on the current users timeline
+def streamYourTL():
+    stream = authStreamer()
+    stream.userstream(_with='following', async=True)
+
+#listen for tweets containing a specific word or hashtag (a phrase might work too)
+def streamWordOrHashtag(wordsList):
+    wordsList = wordsList.split(" ")
+    stream = authStreamer()
+    stream.filter(track=wordsList, async=True)
+
+def decoMain(func):
+    func()
+    print "DONE \n"
+    return func
+
+'''END STREAM'''
 
 def get_api(cfg):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -164,36 +253,40 @@ def check_data_dir_exists():
     finally:
         os.umask(original_umask)
 
+@decoMain
 def main():
-    global cfg
+    global cfg, api
     check_data_dir_exists()
     cfg = getCreds()
     api = get_api(cfg)
     print('Press 99 to quit the Application')
     while True:
-        option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
+        option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
         if option =='99':
             break
         if option == 'twweet':
-            tweet = input('Enter your twweet\n')
+            tweet = raw_input('Enter your twweet\n')
             api.update_status(status=tweet)
             # Yes, tweet is called 'status' rather confusing
         elif option == 'get':
             while True:
-                option = input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: ')
+                option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: \n')
                 if option =='99':
                     sys.exit(0)
                 if option == '66':
                     print('\n\n')
                     break
                 if option == '1':
-                    get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
+                    get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
                 elif option == '2':
-                    get_tweets_of_hashtag(input('Enter the hashtag : '))
+                    streamWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
+                    #get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
                 elif option == '3':
                     get_trending_topics()
                 elif option == '4':
-                    readTimeLine(api)
+                    print('\nStreaming tweets from your TimeLine...')
+                    streamYourTL()
+                    #readTimeLine(api)
                 elif option == '5':
                     getFollowersList(api)
                 else :
