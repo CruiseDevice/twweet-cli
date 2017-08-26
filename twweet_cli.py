@@ -2,14 +2,10 @@ import tweepy
 import os
 import csv
 import json
-import errno
 import sys
 from os.path import expanduser
 from ConfigReader import ConfigurationReader
-
-#change encoding
-reload(sys)
-sys.setdefaultencoding('UTF-8')
+from importlib import reload
 
 # Twitter API credentials
 cfg = {}
@@ -26,10 +22,10 @@ class StreamListener(tweepy.StreamListener):
         super(StreamListener, self).__init__(api)
 
     def on_status(self, status):
-        print '@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " "))
+        print('@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " ")))
 
     def on_error(self, status_code):
-        print 'AN ERROR: {}'.format(status_code)
+        print('AN ERROR: {}'.format(status_code))
     #   read the docs and handle different errors
 
     def keep_alive(self):
@@ -92,13 +88,12 @@ def streamYourTL():
 
 #listen for tweets containing a specific word or hashtag (a phrase might work too)
 def streamWordOrHashtag(wordsList):
-    wordsList = wordsList.split(" ")
     stream = authStreamer()
     stream.filter(track=wordsList, async=True)
 
 def decoMain(func):
     func()
-    print "DONE \n"
+    print( "DONE \n")
     return func
 
 '''END STREAM'''
@@ -113,35 +108,35 @@ def get_api(cfg):
 def get_all_tweets(screen_name):
     api = get_api(cfg)
 
-    #initialize a list to hold all the tweepy Tweets
+    # initialize a list to hold all the tweepy Tweets
     alltweets = []
 
-    #make initial request for most recent tweets (200 is the maximum allowed count)
+    # make initial request for most recent tweets (200 is the maximum allowed count)
     new_tweets = api.user_timeline(screen_name = screen_name, count = 200)
 
-    #save most recent tweets
+    # save most recent tweets
     alltweets.extend(new_tweets)
 
-    #save the id of the oldest tweet less one
+    # save the id of the oldest tweet less one
     oldest = alltweets[-1].id - 1
 
-    #keep grabbing tweets until there are no tweets left to grab
-    #while respecting the api's rate limiting to avoid 429s
-    #probably should lower this to be used a few times in a 15 minute window
+    # keep grabbing tweets until there are no tweets left to grab
+    # while respecting the api's rate limiting to avoid 429s
+    # probably should lower this to be used a few times in a 15 minute window
     last=0
     for iter in range(0,899):
-        print("getting tweets before {}".format(oldest))
+        print(("getting tweets before {}".format(oldest)))
 
-        #all subsiquent requests use the max_id param to prevent duplicates
+        # all subsiquent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name = screen_name, count = 200, max_id = oldest)
 
-        #save most recent tweets
+        # save most recent tweets
         alltweets.extend(new_tweets)
 
         # update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
 
-        print("...{} tweets downloaded so far".format(len(alltweets)))
+        print(("...{} tweets downloaded so far".format(len(alltweets))))
         if last==len(alltweets):
             break
         last=len(alltweets)
@@ -161,21 +156,21 @@ def get_all_tweets(screen_name):
 
     pass
 
-#function to download the tweets of a particular hashtag
+# function to download the tweets of a particular hashtag
 def get_tweets_of_hashtag(hash_tag):
     all_tweets = []
     new_tweets = []
-    print("Please be patient while we download the tweets")
+    print(("Please be patient while we download the tweets"))
 
     api = get_api(cfg)
     for i in range(0,179):
         new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
         for tweet in new_tweets:
             all_tweets.append(tweet.text.encode("utf-8"))
-            #max_id will be id of last tweet when loop completes. shitty wasy of doing things
+            # max_id will be id of last tweet when loop completes. shitty wasy of doing things
             max_id = tweet.id
 
-        print("We have got {} tweets so far".format(len(all_tweets)))
+        print(("We have got {} tweets so far".format(len(all_tweets))))
         new_tweets = tweepy.Cursor(api.search, q=hash_tag).items(200)
         if (len(all_tweets)) >= 1000:
             break
@@ -189,28 +184,28 @@ def get_tweets_of_hashtag(hash_tag):
             if tweet:
                 writer.writerow([tweet])
 
-    print("1000 tweets have been saved to {}.csv".format(hash_tag))
+    print(("1000 tweets have been saved to {}.csv".format(hash_tag)))
 
 
 def get_trending_topics():
 
     api = get_api(cfg)
 
-    trends1 = api.trends_place(1) #1 for worldwide
+    trends1 = api.trends_place(1) # 1 for worldwide
     data = trends1[0]
     trends = data['trends']
-    print("\nTrending topics worldwide :")
+    print(("\nTrending topics worldwide :"))
     for item in trends:
-        print(item['name'])
+        print((item['name']))
 
 def process_or_store(tweet):
-    print(json.dumps(tweet,indent=1))
+    print((json.dumps(tweet,indent=1)))
 
 def readTimeLine(api):
     # loop through the first ten items of your home timeline
     for status in tweepy.Cursor(api.home_timeline).items(10):
         # process a single status
-        # print(status.text)
+        # print((status.text))
         process_or_store(status._json)
 
 def getFollowersList(api):
@@ -230,10 +225,10 @@ def getCreds():
 
 def createCreds():
     try:
-        ck = raw_input('Enter your Consumer Key: ').strip()
-        cs = raw_input('Enter your Consumer Secret: ').strip()
-        at = raw_input('Enter your Access Token: ').strip()
-        ats = raw_input('Enter your Access Token Secret: ').strip()
+        ck = input('Enter your Consumer Key: ').strip()
+        cs = input('Enter your Consumer Secret: ').strip()
+        at = input('Enter your Access Token: ').strip()
+        ats = input('Enter your Access Token Secret: ').strip()
         jsondata= {"consumer_key": ck,
         "consumer_secret": cs,
         "access_token": at,
@@ -253,48 +248,55 @@ def check_data_dir_exists():
     finally:
         os.umask(original_umask)
 
+def home_select_action():
+    option = input(
+        '1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: \n')
+    if option == '99':
+        sys.exit(0)
+    if option == '66':
+        print(('\n\n'))
+        return False
+    if option == '1':
+        get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
+    elif option == '2':
+        words=input('Enter the hashtag or word\nyou may enter multiple words/hashtags separated by a "," : ')
+        streamWordOrHashtag(wordsList=words)
+        # get_tweets_of_hashtag(input('Enter the hashtag : '))
+    elif option == '3':
+        get_trending_topics()
+    elif option == '4':
+        print(('\nStreaming tweets from your TimeLine...'))
+        streamYourTL()
+        return False
+        # readTimeLine(api)
+    elif option == '5':
+        getFollowersList(api)
+    else:
+        print(('please choose any of the above options\n \n'))
+
 @decoMain
 def main():
     global cfg, api
     check_data_dir_exists()
     cfg = getCreds()
     api = get_api(cfg)
-    print('Press 99 to quit the Application')
+    print(('Press 99 to quit the Application'))
     while True:
-        option = raw_input('Enter \'twweet\' or \'get\' or \'edit\': ')
+        option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
         if option =='99':
             break
         if option == 'twweet':
-            tweet = raw_input('Enter your twweet\n')
+            tweet = input('Enter your twweet\n')
             api.update_status(status=tweet)
             # Yes, tweet is called 'status' rather confusing
         elif option == 'get':
-            while True:
-                option = raw_input('1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: \n')
-                if option =='99':
-                    sys.exit(0)
-                if option == '66':
-                    print('\n\n')
-                    break
-                if option == '1':
-                    get_all_tweets(raw_input('Enter the username whose twweet\'s you want to grab '))
-                elif option == '2':
-                    streamWordOrHashtag(wordsList=raw_input('Enter the hashtag : '))
-                    #get_tweets_of_hashtag(raw_input('Enter the hashtag : '))
-                elif option == '3':
-                    get_trending_topics()
-                elif option == '4':
-                    print('\nStreaming tweets from your TimeLine...')
-                    streamYourTL()
-                    #readTimeLine(api)
-                elif option == '5':
-                    getFollowersList(api)
-                else :
-                    print('please choose any of the above options\n \n')
+            check = True
+            while check:
+                check = home_select_action()
         elif option == 'edit':
             createCreds()
         else :
-            print('Please choose any of the above options \n \n')
+            print(('Please choose any of the above options \n \n'))
 
 if __name__ == "__main__":
     main()
