@@ -10,6 +10,7 @@ from codecs import open
 from os import path
 from os.path import expanduser
 import os,json
+import shutil
 
 here = path.abspath(path.dirname(__file__))
 home = expanduser("~")
@@ -27,6 +28,10 @@ class TwtApiDetails(install):
 def check_data_dir_exists():
     try:
         original_umask = os.umask(0)
+        if os.path.exists(home+'/.twweet-cli/data'):
+            response = input("The data directory already exists. Would you like to overwrite?yes/no:")
+            if response.lower() == 'yes':
+                shutil.rmtree(home+'/.twweet-cli/data')
         os.makedirs(home+'/.twweet-cli/data')
     except OSError:
         print("Cannot create data dir the installation cannot continue..")
@@ -45,7 +50,7 @@ def createCreds():
     "access_token_secret": ats}
     with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
-    os.chmod(home+"/.twweet-cli/data/creds.json",0o777)
+    os.chmod(home+"/.twweet-cli/data/creds.json", 0o777)
 
 setup(
     name='twweet_cli',
