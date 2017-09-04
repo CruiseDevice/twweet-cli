@@ -45,7 +45,7 @@ def createCreds():
     "access_token_secret": ats}
     with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
-    os.chmod(home+"/.twweet-cli/data/creds.json")
+    os.chmod(home+"/.twweet-cli/data/creds.json",0o777)
 
 setup(
     name='twweet_cli',

@@ -271,6 +271,8 @@ def home_select_action():
         # readTimeLine(api)
     elif option == '5':
         getFollowersList(api)
+    elif option == '6':
+        getTweets(api)
     else:
         print(('please choose any of the above options\n \n'))
 
