@@ -4,7 +4,7 @@ import csv
 import json
 import sys
 from os.path import expanduser
-from .ConfigReader import ConfigurationReader
+from config.ConfigReader import ConfigurationReader
 from importlib import reload
 
 # Twitter API credentials
