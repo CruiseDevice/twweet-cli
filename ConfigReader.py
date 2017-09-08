@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Aug 17 01:26:52 2017
-
 @author: Ankit Singh
 """
 import yaml
@@ -16,13 +15,11 @@ class ConfigurationReader(object):
             cfg = yaml.load(ymlfile)
         ConfigurationReader.__Tweets=cfg['Tweets']
         ConfigurationReader.__HashTag=cfg['HashTag']
-        
+
     @staticmethod
     def GetTweetsStorage():
         return ConfigurationReader.__Tweets
-    
+
     @staticmethod
     def GetHashTagStorage():
         return ConfigurationReader.__HashTag
-    
-
