@@ -209,8 +209,11 @@ def readTimeLine(api):
         process_or_store(status._json)
 
 def getFollowersList(api):
-    for friend in tweepy.Cursor(api.user_timeline).items(10):
-        process_or_store(friend._json)
+    id=0
+    for friend in tweepy.Cursor(api.followers).items(10):         
+       friend=friend._json
+       id +=1
+       print("{}. {} -- @{}".format(id,friend["name"],friend["screen_name"] ))
 
 
 def getTweets(api):
