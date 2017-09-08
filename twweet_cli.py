@@ -210,14 +210,16 @@ def readTimeLine(api):
 
 def getFollowersList(api):
     id=0
-    for friend in tweepy.Cursor(api.followers).items(10):
+    numberOfFollowers = input('Enter number of followers you want to get: ')
+    for friend in tweepy.Cursor(api.followers).items(int(numberOfFollowers)):
        friend=friend._json
        id +=1
        print("{}. {} -- @{}".format(id,friend["name"],friend["screen_name"] ))
 
 def getTweets(api):
     id = 0
-    for tweet in tweepy.Cursor(api.user_timeline).items(10):
+    numberOfTweets = input('Enter the number of Tweets you want to get: ')
+    for tweet in tweepy.Cursor(api.user_timeline).items(int(numberOfTweets)):
         # process_or_store(tweet._json)
         tweet = tweet._json
         id += 1
