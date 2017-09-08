@@ -216,8 +216,12 @@ def getFollowersList(api):
        print("{}. {} -- @{}".format(id,friend["name"],friend["screen_name"] ))
 
 def getTweets(api):
+    id = 0
     for tweet in tweepy.Cursor(api.user_timeline).items(10):
-        process_or_store(tweet._json)
+        # process_or_store(tweet._json)
+        tweet = tweet._json
+        id += 1
+        print("{}.{}".format(id,tweet["text"]))
 
 def getCreds():
     if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
