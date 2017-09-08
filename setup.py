@@ -23,6 +23,14 @@ class TwtApiDetails(install):
         print("Creating Data Directories...")
         check_data_dir_exists()
         createCreds()
+        print("Creating default config files. Please note that this overwrites the files if exist....")
+        with open(home+'/.twweet-cli/data/config.yml','w') as ymlfile:
+             ymlFilecontent = """#Dependig on the system(Windows or Linux) change the backward or forward slash appropriately.
+Tweets: /TweetsStore/
+
+HashTag : /HashTagStore/
+"""
+             ymlfile.write(ymlFilecontent)
         install.run(self)
 
 def check_data_dir_exists():
@@ -91,5 +99,7 @@ setup(
         'console_scripts': [
             'twweet-cli = twweet_cli:main',
         ],
-     }
+     },
+
+
 )

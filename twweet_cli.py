@@ -4,7 +4,7 @@ import csv
 import json
 import sys
 from os.path import expanduser
-from ConfigReader import ConfigurationReader
+from config.ConfigReader import ConfigurationReader
 from importlib import reload
 
 # Twitter API credentials
@@ -210,11 +210,10 @@ def readTimeLine(api):
 
 def getFollowersList(api):
     id=0
-    for friend in tweepy.Cursor(api.followers).items(10):         
+    for friend in tweepy.Cursor(api.followers).items(10):
        friend=friend._json
        id +=1
        print("{}. {} -- @{}".format(id,friend["name"],friend["screen_name"] ))
-
 
 def getTweets(api):
     for tweet in tweepy.Cursor(api.user_timeline).items(10):
