@@ -1,7 +1,3 @@
-`$ python -m twweet-cli`
-
-**_Note: Requires Python 2.7_**
-
 # twweet-cli
 Tweet right from your cli without even opening your browser.
 
