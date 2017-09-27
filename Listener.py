@@ -1,25 +1,13 @@
 import tweepy
-import os
-import csv
-import json
-import sys
-from os.path import expanduser
-from config.ConfigReader import ConfigurationReader
-from importlib import reload
-
-# Twitter API credentials
-cfg = {}
-home = expanduser("~")
-Configuration = ConfigurationReader()
-TweetsStorage = Configuration.GetTweetsStorage()
-HashTagStorage = Configuration.GetTweetsStorage()
+from Twweeter import Twweeter
 
 '''STREAM'''
 
 class StreamListener(tweepy.StreamListener):
     # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
-    def __init__(self, time_limit=60):
-        super(StreamListener, self).__init__(api)
+    def __init__(self, twweeterObj, time_limit=60):
+        self.twweeterObj = twweeterObj
+        super(StreamListener, self).__init__(self.twweeterObj.api)
 
     def on_status(self, status):
         print('@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " ")))
@@ -79,7 +67,7 @@ class Listener():
     
     def __init__(self, twweeterObj):
         self.twweeterObj = twweeterObj
-        self.streamListenerOB = StreamListener()
+        self.streamListenerOB = StreamListener(self.twweeterObj)
 
     # authorise the stream listener
     def authStreamer(self):

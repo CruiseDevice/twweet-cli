@@ -1,19 +1,12 @@
 from Twweeter import Twweeter
-import tweepy
 import os
-import csv
-import json
 import sys
 from os.path import expanduser
-from config.ConfigReader import ConfigurationReader
-from importlib import reload
 from Listener import Listener
 
 # Twitter API credentials
 home = expanduser("~")
-Configuration = ConfigurationReader()
-TweetsStorage = Configuration.GetTweetsStorage()
-HashTagStorage = Configuration.GetTweetsStorage()
+
 
 def _decorator(f):
     f()
