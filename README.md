@@ -39,3 +39,9 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 `$ twweet-cli`
 
 **_Note: Requires Python 3.x_**
+
+# Contributing
+
+## Current Features
+
+## Roadmap
