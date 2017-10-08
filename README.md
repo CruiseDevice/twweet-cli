@@ -29,13 +29,34 @@ Tweet right from your cli without even opening your browser.
 
 Log in to https://apps.twitter.com/ to create a new app and generate your OAuth credentials:
 
-* consumer_key
-* consumer_secret
-* access_token
-* access\_token\_secret
+* Consumer Key (API Key)
+* Consumer Secret (API Secret)
+* Access Token
+* Access Token Secret
 
 **Run the application**
 
 `$ twweet-cli`
 
 **_Note: Requires Python 3.x_**
+
+## Usage
+
+* type ` twweet` to post a tweet.
+* type ` get` to get different types of information from twitter. A menu will be provided to choose for your choice of             information.
+* type ` edit` to change your Ouath credentials.
+* type ` 99` to quit the application. 
+
+
+## Contributing
+
+### Features present
+
+* tweet from your CLI without opening the browser.
+* Changing `Consumer Key`  `Consumer Secret`  `Access Token`  `Access Token Secret` keys for twweet-cli. 
+* geting the tweets of any user by providing the username.
+* getting the tweets of a particular hashtag by providing the same.
+* getting the trending topics on twitter. 
+* getting the tweets in your timeline.
+* getting your follower list and their respective user name on twitter(number of followers to be displayed can be assigned).
+* getting your own tweets(number of tweets to be displayed can be assigned).
