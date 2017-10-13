@@ -82,6 +82,8 @@ class TwweetCLI():
             else :
                 print(('Please choose any of the above options \n \n'))
 
+def cli():
+    TwweetCLI().main()
 
 if __name__ == "__main__":
-    TwweetCLI().main()
+    cli()
