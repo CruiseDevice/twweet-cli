@@ -23,7 +23,7 @@ Tweet right from your cli without even opening your browser.
 
 **Now run setup.py file.**
 
-`$ sudo python setup.py install`
+`$ sudo python3 setup.py install`
 
 **Create a Twitter "App"**
 
