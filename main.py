@@ -15,11 +15,16 @@ def _decorator(f):
 
 
 class TwweetCLI():
-    
+
     def __init__(self):
         self.twweeterObj = None
         self.listenerObj = None
-    
+
+    def _decorator(self, f):
+        self.f()
+        print( "DONE \n")
+        return self.f
+
     def check_data_dir_exists(self):
         try:
             original_umask = os.umask(0)
@@ -31,7 +36,7 @@ class TwweetCLI():
 
 
     def home_select_action(self):
-        
+
         option = input(
             '1.Get tweets of any user \n2.Get tweets of particular hashtag \n3.Get trending topics\n4.Read your timeline\n5.Get your followers list \n6.Get your tweets\nPress 99 to exit or press 66 to go back to main menu :: \n')
         if option == '99':
@@ -59,7 +64,7 @@ class TwweetCLI():
         else:
             print(('please choose any of the above options\n \n'))
 
-    @_decorator
+
     def main(self):
         self.twweeterObj = Twweeter()
         self.listenerObj = Listener(self.twweeterObj)
@@ -83,7 +88,8 @@ class TwweetCLI():
                 print(('Please choose any of the above options \n \n'))
 
 def cli():
-    TwweetCLI().main()
+    Tww = TwweetCLI()
+    Tww.main()
 
 if __name__ == "__main__":
     cli()
