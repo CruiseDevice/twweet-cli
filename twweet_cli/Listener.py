@@ -1,5 +1,4 @@
 import tweepy
-from Twweeter import Twweeter
 
 '''STREAM'''
 

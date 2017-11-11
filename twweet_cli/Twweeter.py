@@ -4,8 +4,7 @@ import csv
 import json
 import sys
 from os.path import expanduser
-from config.ConfigReader import ConfigurationReader
-from importlib import reload
+from .config.ConfigReader import ConfigurationReader
 
 # Twitter API credentials
 home = expanduser("~")
@@ -90,6 +89,9 @@ class Twweeter():
     def get_tweets_of_hashtag(self, hash_tag):
         print(("Please be patient while we download the tweets"))
 
+        # initialize a list to hold all the tweepy Tweets
+        all_tweets = []
+
         for i in range(0,179):
             new_tweets = tweepy.Cursor(self.api.search, q=hash_tag).items(200)
             for tweet in new_tweets:
@@ -130,7 +132,7 @@ class Twweeter():
         for status in tweepy.Cursor(self.api.home_timeline).items(10):
             # process a single status
             # print((status.text))
-            process_or_store(status._json)
+            self.process_or_store(status._json)
 
     def getFollowersList(self):
         id=0

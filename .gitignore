@@ -12,3 +12,6 @@ CruiseDevice_tweets.csv
 data/
 *.pyc
 
+# PyCharm internal folder
+.idea/
+
