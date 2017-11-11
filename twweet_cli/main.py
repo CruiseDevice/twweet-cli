@@ -1,8 +1,8 @@
-from Twweeter import Twweeter
+from .Twweeter import Twweeter
 import os
 import sys
 from os.path import expanduser
-from Listener import Listener
+from .Listener import Listener
 
 # Twitter API credentials
 home = expanduser("~")

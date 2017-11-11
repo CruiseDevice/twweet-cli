@@ -94,10 +94,9 @@ setup(
          'pyyaml'
      ],
 
-     py_modules=["twweet_cli"],
      entry_points={
         'console_scripts': [
-            'twweet-cli = main:cli',
+            'twweet-cli = twweet_cli.main:cli',
         ],
      },
 
