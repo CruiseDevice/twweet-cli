@@ -58,7 +58,7 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 
 * tweet from your CLI without opening the browser.
 * Changing `Consumer Key`  `Consumer Secret`  `Access Token`  `Access Token Secret` keys for twweet-cli. 
-* geting the tweets of any user by providing the username.
+* getting the tweets of any user by providing the username.
 * getting the tweets of a particular hashtag by providing the same.
 * getting the trending topics on twitter. 
 * getting the tweets in your timeline.
