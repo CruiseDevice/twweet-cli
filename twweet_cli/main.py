@@ -81,6 +81,9 @@ class TwweetCLI():
                 break
             if option == 'twweet':
                 tweet = input('Enter your twweet\n')
+                if len(tweet) >= 140:
+                    print("Tweet length exceeds the limit of 140 characters!")
+                    continue
                 self.twweeterObj.api.update_status(status=tweet)
                 # Yes, tweet is called 'status' rather confusing
             elif option == 'get':
