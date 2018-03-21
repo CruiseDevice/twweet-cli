@@ -54,6 +54,8 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 
 ## Contributing
 
+I appreciate any help and support. Feel free to [fork](https://github.com/CruiseDevice/twweet-cli#fork-destination-box) and [create a pull request](https://github.com/CruiseDevice/twweet-cli/compare)
+
 ### Features present
 
 * tweet from your CLI without opening the browser.
