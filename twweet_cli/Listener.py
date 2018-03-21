@@ -2,14 +2,17 @@ import tweepy
 
 '''STREAM'''
 
+
 class StreamListener(tweepy.StreamListener):
-    # Decided I would keep all the overridable functions from the BaseClass so we know what we have to play with.
+    # Decided I would keep all the overridable functions from the BaseClass
+    # so we know what we have to play with.
     def __init__(self, twweeterObj, time_limit=60):
         self.twweeterObj = twweeterObj
         super(StreamListener, self).__init__(self.twweeterObj.api)
 
     def on_status(self, status):
-        print('@{} => {}'.format(status.user.screen_name, status.text.replace("\n", " ")))
+        print('@{} => {}'.format(status.user.screen_name,
+                                 status.text.replace("\n", " ")))
 
     def on_error(self, status_code):
         print('AN ERROR: {}'.format(status_code))
@@ -62,30 +65,28 @@ class StreamListener(tweepy.StreamListener):
         """Called when a disconnection warning message arrives"""
         return
 
+
 class Listener():
-    
+
     def __init__(self, twweeterObj):
         self.twweeterObj = twweeterObj
         self.streamListenerOB = StreamListener(self.twweeterObj)
 
-    # authorise the stream listener
+    # authorise the StreamListener
     def authStreamer(self):
-        stream = tweepy.Stream(auth=self.twweeterObj.api.auth, listener=self.streamListenerOB)
+        stream = tweepy.Stream(auth=self.twweeterObj.api.auth,
+                               listener=self.streamListenerOB)
         return stream
 
-    #Listen for tweets on the current users timeline
+    # listen for tweets on the current users timeline
     def streamYourTL(self):
         stream = self.authStreamer()
         stream.userstream(_with='following', async=True)
 
-    #listen for tweets containing a specific word or hashtag (a phrase might work too)
+    # listen for tweets containing a specific word or hashtag (a phrase might work too)
     def streamWordOrHashtag(self, wordsList):
         stream = self.authStreamer()
         stream.filter(track=wordsList, async=True)
 
+
 '''END STREAM'''
-
-
-
-
-
