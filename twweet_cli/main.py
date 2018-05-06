@@ -74,6 +74,7 @@ class TwweetCLI():
         self.twweeterObj = Twweeter()
         self.listenerObj = Listener(self.twweeterObj)
         self.check_data_dir_exists()
+        print("_____________      __  __      ___________________________________\n\__    ___/  \    /  \/  \    /  \_   _____/\_   _____/\__    ___/\n  |    |  \   \/\/   /\   \/\/   /|    __)_  |    __)_   |    |     ______ \n  |    |   \        /  \        / |        \ |        \  |    |    /_____/ \n  |____|    \__/\  /    \__/\  / /_______  //_______  /  |____| \n                 \/          \/          \/         \/ \n_________ .____    .___ \n\_   ___ \|    |   |   | \n/    \  \/|    |   |   | \n\     \___|    |___|   | \n \______  /_______ \___| \n        \/        \/ \n")
         print('Press 99 to quit the Application')
         while True:
             option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
