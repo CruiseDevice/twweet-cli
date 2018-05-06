@@ -27,7 +27,7 @@ For Linux users:
 `$ sudo python3 setup.py install`
 
 For Windows users:
-`$ sudo python setup.py install`
+`$ python setup.py install`
 
 **Create a Twitter "App"**
 
