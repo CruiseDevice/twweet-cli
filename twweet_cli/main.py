@@ -53,19 +53,19 @@ class TwweetCLI():
             self.twweeterObj.get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
             words = input('Enter the hashtag or word\nyou may enter multiple words/hashtags separated by a "," : ')
-            self.listenerObj.streamWordOrHashtag(wordsList=words)
+            self.listenerObj.stream_word_or_hashtag(wordsList=words)
             # get_tweets_of_hashtag(input('Enter the hashtag : '))
         elif option == '3':
             self.twweeterObj.get_trending_topics()
         elif option == '4':
             print(('\nStreaming tweets from your TimeLine...'))
-            self.listenerObj.streamYourTL()
+            self.listenerObj.stream_your_tl()
             return False
             # readTimeLine(api)
         elif option == '5':
-            self.twweeterObj.getFollowersList()
+            self.twweeterObj.get_followers_list()
         elif option == '6':
-            self.twweeterObj.getTweets()
+            self.twweeterObj.get_tweets()
         else:
             print(('please choose any of the above options\n \n'))
 
@@ -92,7 +92,7 @@ class TwweetCLI():
                 while check:
                     check = self.home_select_action()
             elif option == 'edit':
-                self.twweeterObj.createCreds()
+                self.twweeterObj.create_creds()
             else:
                 print('Please choose any of the above options \n \n')
 

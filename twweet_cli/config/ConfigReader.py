@@ -19,9 +19,9 @@ class ConfigurationReader(object):
         ConfigurationReader.__HashTag=cfg['HashTag']
 
     @staticmethod
-    def GetTweetsStorage():
+    def get_tweets_storage():
         return ConfigurationReader.__Tweets
 
     @staticmethod
-    def GetHashTagStorage():
+    def get_hashtag_storage():
         return ConfigurationReader.__HashTag

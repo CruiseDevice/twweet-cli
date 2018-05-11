@@ -8,14 +8,14 @@ from .config.ConfigReader import ConfigurationReader
 # Twitter API credentials
 home = os.path.expanduser("~")
 Configuration = ConfigurationReader()
-TweetsStorage = Configuration.GetTweetsStorage()
-HashTagStorage = Configuration.GetTweetsStorage()
+TweetsStorage = Configuration.get_tweets_storage()
+HashTagStorage = Configuration.get_tweets_storage()
 
 
 class Twweeter():
 
     def __init__(self):
-        self.cfg = self.getCreds()
+        self.cfg = self.get_creds()
         self.api = self.get_api(self.cfg)
 
     def get_api(self, cfg):
@@ -130,14 +130,14 @@ class Twweeter():
     def process_or_store(self, tweet):
         print(json.dumps(tweet, indent=1))
 
-    def readTimeLine(self):
+    def read_time_line(self):
         # loop through the first ten items of your home timeline
         for status in tweepy.Cursor(self.api.home_timeline).items(10):
             # process a single status
             # print((status.text))
             self.process_or_store(status._json)
 
-    def getFollowersList(self):
+    def get_followers_list(self):
         id_num = 0
         num_followers = int(input('Enter number of followers you want to get: '))
         for friend in tweepy.Cursor(self.api.followers).items(num_followers):
@@ -145,7 +145,7 @@ class Twweeter():
             id_num += 1
             print("{}. {} -- @{}".format(id_num, friend["name"], friend["screen_name"]))
 
-    def getTweets(self):
+    def get_tweets(self):
         id_num = 0
         num_tweets = int(input('Enter the number of Tweets you want to get: '))
         for tweet in tweepy.Cursor(self.api.user_timeline).items(num_tweets):
@@ -154,13 +154,13 @@ class Twweeter():
             id_num += 1
             print("{}.{}".format(id_num, tweet["text"]))
 
-    def getCreds(self):
+    def get_creds(self):
         if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
-            self.createCreds()
+            self.create_creds()
         with open(home + '/.twweet-cli/data/creds.json') as json_file:
             return json.load(json_file)
 
-    def createCreds(self):
+    def create_creds(self):
         try:
             ck = input('Enter your Consumer Key: ').strip()
             cs = input('Enter your Consumer Secret: ').strip()

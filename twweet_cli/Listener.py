@@ -73,19 +73,19 @@ class Listener():
         self.streamListenerOB = StreamListener(self.twweeterObj)
 
     # authorise the StreamListener
-    def authStreamer(self):
+    def auth_streamer(self):
         stream = tweepy.Stream(auth=self.twweeterObj.api.auth,
                                listener=self.streamListenerOB)
         return stream
 
     # listen for tweets on the current users timeline
-    def streamYourTL(self):
-        stream = self.authStreamer()
+    def stream_your_tl(self):
+        stream = self.auth_streamer()
         stream.userstream(_with='following', async=True)
 
     # listen for tweets containing a specific word or hashtag (a phrase might work too)
-    def streamWordOrHashtag(self, wordsList):
-        stream = self.authStreamer()
+    def stream_word_or_hashtag(self, wordsList):
+        stream = self.auth_streamer()
         stream.filter(track=wordsList, async=True)
 
 
