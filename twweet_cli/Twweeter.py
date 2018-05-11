@@ -7,9 +7,9 @@ from .config.ConfigReader import ConfigurationReader
 
 # Twitter API credentials
 home = os.path.expanduser("~")
-Configuration = ConfigurationReader()
-TweetsStorage = Configuration.get_tweets_storage()
-HashTagStorage = Configuration.get_tweets_storage()
+configuration = ConfigurationReader()
+tweets_storage = configuration.get_tweets_storage()
+hashtag_storage = configuration.get_tweets_storage()
 
 
 class Twweeter():
@@ -38,16 +38,16 @@ class Twweeter():
 
         """
         # initialize a list to hold all the tweepy Tweets
-        alltweets = []
+        all_tweets = []
 
         # make initial request for most recent tweets (200 is the maximum allowed count)
         new_tweets = self.api.user_timeline(screen_name=screen_name, count=200)
 
         # save most recent tweets
-        alltweets.extend(new_tweets)
+        all_tweets.extend(new_tweets)
 
         # save the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
+        oldest = all_tweets[-1].id - 1
 
         # keep grabbing tweets until there are no tweets left to grab
         # while respecting the api's rate limiting to avoid 429s
@@ -62,28 +62,28 @@ class Twweeter():
                                                 count=200, max_id=oldest)
 
             # save most recent tweets
-            alltweets.extend(new_tweets)
+            all_tweets.extend(new_tweets)
 
             # update the id of the oldest tweet less one
-            oldest = alltweets[-1].id - 1
+            oldest = all_tweets[-1].id - 1
 
-            print(("...{} tweets downloaded so far".format(len(alltweets))))
-            if last == len(alltweets):
+            print(("...{} tweets downloaded so far".format(len(all_tweets))))
+            if last == len(all_tweets):
                 break
-            last = len(alltweets)
+            last = len(all_tweets)
 
         # transform the tweepy tweets into a 2D array that will populate the csv
-        outtweets = [[tweet.id_str,tweet.created_at,tweet.text.encode("utf-8")]for tweet in alltweets]
+        out_tweets = [[tweet.id_str,tweet.created_at,tweet.text.encode("utf-8")]for tweet in all_tweets]
 
         # write to csv
-        global TweetsStorage
-        TweetsStorage = str(os.getcwd() + TweetsStorage)
-        os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
-        fname = str(TweetsStorage + screen_name + '_tweets.csv')
-        with open(fname, 'w') as f:
+        global tweets_storage
+        tweets_storage = str(os.getcwd() + tweets_storage)
+        os.makedirs(os.path.dirname(tweets_storage), exist_ok=True)
+        f_name = str(tweets_storage + screen_name + '_tweets.csv')
+        with open(f_name, 'w') as f:
             writer = csv.writer(f)
             writer.writerow(["id", "created_at", "text"])
-            writer.writerows(outtweets)
+            writer.writerows(out_tweets)
 
         pass
 
@@ -106,11 +106,11 @@ class Twweeter():
             if (len(all_tweets)) >= 1000:
                 break
 
-        global HashTagStorage
-        HashTagStorage = str(os.getcwd() + HashTagStorage)
-        os.makedirs(os.path.dirname(TweetsStorage), exist_ok=True)
-        filename = str(HashTagStorage + hash_tag + 's.csv')
-        with open(filename, 'w') as f:
+        global hashtag_storage
+        hashtag_storage = str(os.getcwd() + hashtag_storage)
+        os.makedirs(os.path.dirname(tweets_storage), exist_ok=True)
+        file_name = str(hashtag_storage + hash_tag + 's.csv')
+        with open(file_name, 'w') as f:
             writer = csv.writer(f)
             for tweet in all_tweets:
                 if tweet:
@@ -120,8 +120,8 @@ class Twweeter():
 
     def get_trending_topics(self):
 
-        trends1 = self.api.trends_place(1)  # 1 for worldwide
-        data = trends1[0]
+        trends_1 = self.api.trends_place(1)  # 1 for worldwide
+        data = trends_1[0]
         trends = data['trends']
         print("\nTrending topics worldwide :")
         for item in trends:

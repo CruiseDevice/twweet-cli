@@ -17,8 +17,8 @@ def _decorator(f):
 class TwweetCLI():
 
     def __init__(self):
-        self.twweeterObj = None
-        self.listenerObj = None
+        self.twweeter_obj = None
+        self.listener_obj = None
 
     def _decorator(self, f):
         self.f()
@@ -50,29 +50,29 @@ class TwweetCLI():
             print(('\n\n'))
             return False
         if option == '1':
-            self.twweeterObj.get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
+            self.twweeter_obj.get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
         elif option == '2':
             words = input('Enter the hashtag or word\nyou may enter multiple words/hashtags separated by a "," : ')
-            self.listenerObj.stream_word_or_hashtag(wordsList=words)
+            self.listener_obj.stream_word_or_hashtag(words_list=words)
             # get_tweets_of_hashtag(input('Enter the hashtag : '))
         elif option == '3':
-            self.twweeterObj.get_trending_topics()
+            self.twweeter_obj.get_trending_topics()
         elif option == '4':
             print(('\nStreaming tweets from your TimeLine...'))
-            self.listenerObj.stream_your_tl()
+            self.listener_obj.stream_your_tl()
             return False
             # readTimeLine(api)
         elif option == '5':
-            self.twweeterObj.get_followers_list()
+            self.twweeter_obj.get_followers_list()
         elif option == '6':
-            self.twweeterObj.get_tweets()
+            self.twweeter_obj.get_tweets()
         else:
             print(('please choose any of the above options\n \n'))
 
 
     def main(self):
-        self.twweeterObj = Twweeter()
-        self.listenerObj = Listener(self.twweeterObj)
+        self.twweeter_obj = Twweeter()
+        self.listener_obj = Listener(self.twweeter_obj)
         self.check_data_dir_exists()
         print("_____________      __  __      ___________________________________\n\__    ___/  \    /  \/  \    /  \_   _____/\_   _____/\__    ___/\n  |    |  \   \/\/   /\   \/\/   /|    __)_  |    __)_   |    |     ______ \n  |    |   \        /  \        / |        \ |        \  |    |    /_____/ \n  |____|    \__/\  /    \__/\  / /_______  //_______  /  |____| \n                 \/          \/          \/         \/ \n_________ .____    .___ \n\_   ___ \|    |   |   | \n/    \  \/|    |   |   | \n\     \___|    |___|   | \n \______  /_______ \___| \n        \/        \/ \n")
         print('Press 99 to quit the Application')
@@ -85,21 +85,21 @@ class TwweetCLI():
                 if len(tweet) >= 140:
                     print("Tweet length exceeds the limit of 140 characters!")
                     continue
-                self.twweeterObj.api.update_status(status=tweet)
+                self.twweeter_obj.api.update_status(status=tweet)
                 # Yes, tweet is called 'status' rather confusing
             elif option == 'get':
                 check = True
                 while check:
                     check = self.home_select_action()
             elif option == 'edit':
-                self.twweeterObj.create_creds()
+                self.twweeter_obj.create_creds()
             else:
                 print('Please choose any of the above options \n \n')
 
 
 def cli():
-    Tww = TwweetCLI()
-    Tww.main()
+    tww = TwweetCLI()
+    tww.main()
 
 
 if __name__ == "__main__":

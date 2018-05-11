@@ -26,14 +26,14 @@ class TwtApiDetails(install):
         print("""Creating default config files.
               Please note that this overwrites the files if exist....""")
         with open(home + '/.twweet-cli/data/config.yml', 'w') as ymlfile:
-            ymlFilecontent = """
+            yml_file_content = """
             #Depending on the system(Windows or Linux)
             change the backward or forward slash appropriately.
             Tweets: /TweetsStore/
 
             HashTag : /HashTagStore/
             """
-            ymlfile.write(ymlFilecontent)
+            ymlfile.write(yml_file_content)
         install.run(self)
 
 

@@ -6,9 +6,9 @@ import tweepy
 class StreamListener(tweepy.StreamListener):
     # Decided I would keep all the overridable functions from the BaseClass
     # so we know what we have to play with.
-    def __init__(self, twweeterObj, time_limit=60):
-        self.twweeterObj = twweeterObj
-        super(StreamListener, self).__init__(self.twweeterObj.api)
+    def __init__(self, twweeter_obj, time_limit=60):
+        self.twweeter_obj = twweeter_obj
+        super(StreamListener, self).__init__(self.twweeter_obj.api)
 
     def on_status(self, status):
         print('@{} => {}'.format(status.user.screen_name,
@@ -68,25 +68,25 @@ class StreamListener(tweepy.StreamListener):
 
 class Listener():
 
-    def __init__(self, twweeterObj):
-        self.twweeterObj = twweeterObj
-        self.streamListenerOB = StreamListener(self.twweeterObj)
+    def __init__(self, twweeter_obj):
+        self.twweeter_obj = twweeter_obj
+        self.stream_listener_ob = StreamListener(self.twweeter_obj)
 
     # authorise the StreamListener
     def auth_streamer(self):
-        stream = tweepy.Stream(auth=self.twweeterObj.api.auth,
-                               listener=self.streamListenerOB)
+        stream = tweepy.Stream(auth=self.twweeter_obj.api.auth,
+                               listener=self.stream_listener_ob)
         return stream
 
-    # listen for tweets on the current users timeline
+    # listen for tweets on the current user's timeline
     def stream_your_tl(self):
         stream = self.auth_streamer()
         stream.userstream(_with='following', async=True)
 
     # listen for tweets containing a specific word or hashtag (a phrase might work too)
-    def stream_word_or_hashtag(self, wordsList):
+    def stream_word_or_hashtag(self, words_list):
         stream = self.auth_streamer()
-        stream.filter(track=wordsList, async=True)
+        stream.filter(track=words_list, async=True)
 
 
 '''END STREAM'''
