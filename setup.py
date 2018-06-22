@@ -22,7 +22,7 @@ class TwtApiDetails(install):
     def run(self):
         print("Creating Data Directories...")
         check_data_dir_exists()
-        createCreds()
+        create_creds()
         print("""Creating default config files.
               Please note that this overwrites the files if exist....""")
         with open(home + '/.twweet-cli/data/config.yml', 'w') as ymlfile:
@@ -49,7 +49,7 @@ def check_data_dir_exists():
         os.umask(original_umask)
 
 
-def createCreds():
+def create_creds():
     ck = input('Enter your Consumer Key: ').strip()
     cs = input('Enter your Consumer Secret: ').strip()
     at = input('Enter your Access Token: ').strip()
