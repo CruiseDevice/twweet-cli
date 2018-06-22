@@ -22,19 +22,15 @@ class TwtApiDetails(install):
     def run(self):
         print("Creating Data Directories...")
         check_data_dir_exists()
-        create_creds()
+        createCreds()
         print("""Creating default config files.
               Please note that this overwrites the files if exist....""")
         with open(home + '/.twweet-cli/data/config.yml', 'w') as ymlfile:
-            yml_file_content = """
-            #Depending on the system(Windows or Linux)
-            change the backward or forward slash appropriately.
-            Tweets: /TweetsStore/
-
-            HashTag : /HashTagStore/
-            """
-            ymlfile.write(yml_file_content)
-        install.run(self)
+            ymlLine1 = "#Depending on the system(Windows or Linux) change the backward or forward slash appropriately."
+            ymlLine2 = "Tweets: /TweetsStore/"
+            ymlLine3 = "HashTag: /HashTagStore/"
+            ymlfile.write("%s\n%s\n%s\n" % (ymlLine1, ymlLine2, ymlLine3))
+            install.run(self)
 
 
 def check_data_dir_exists():
@@ -53,7 +49,7 @@ def check_data_dir_exists():
         os.umask(original_umask)
 
 
-def create_creds():
+def createCreds():
     ck = input('Enter your Consumer Key: ').strip()
     cs = input('Enter your Consumer Secret: ').strip()
     at = input('Enter your Access Token: ').strip()
