@@ -130,7 +130,7 @@ class Twweeter():
     def process_or_store(self, tweet):
         print(json.dumps(tweet, indent=1))
 
-    def read_time_line(self):
+    def read_timeline(self):
         # loop through the first ten items of your home timeline
         for status in tweepy.Cursor(self.api.home_timeline).items(10):
             # process a single status

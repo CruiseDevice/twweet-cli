@@ -61,7 +61,7 @@ class TwweetCLI():
             print(('\nStreaming tweets from your TimeLine...'))
             self.listener_obj.stream_your_tl()
             return False
-            # readTimeLine(api)
+            # read_timeline(api)
         elif option == '5':
             self.twweeter_obj.get_followers_list()
         elif option == '6':
