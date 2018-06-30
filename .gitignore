@@ -15,3 +15,4 @@ data/
 # PyCharm internal folder
 .idea/
 
+/.vs
