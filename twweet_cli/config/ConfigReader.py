@@ -7,21 +7,21 @@ import yaml
 from os.path import expanduser
 
 ##to do
-yml_path=expanduser("~")
+ymlPath = expanduser("~")
 #implement singleton pattern here
 class ConfigurationReader(object):
-    __tweets=None
-    __hashtag=None
+    __Tweets = None
+    __HashTag = None
     def __init__(self):
-        with open(yml_path+'/.twweet-cli/data/config.yml', 'r') as ymlfile:
+        with open(ymlPath + '/.twweet-cli/data/config.yml', 'r') as ymlfile:
              cfg = yaml.load(ymlfile)
-        ConfigurationReader.__tweets=cfg['Tweets']
-        ConfigurationReader.__hashtag=cfg['HashTag']
+        ConfigurationReader.__Tweets = cfg['Tweets']
+        ConfigurationReader.__HashTag = cfg['HashTag']
 
     @staticmethod
-    def get_tweets_storage():
-        return ConfigurationReader.__tweets
+    def GetTweetsStorage():
+        return ConfigurationReader.__Tweets
 
     @staticmethod
-    def get_hashtag_storage():
-        return ConfigurationReader.__hashtag
+    def GetHashTagStorage():
+        return ConfigurationReader.__HashTag
