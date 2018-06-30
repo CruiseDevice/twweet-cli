@@ -58,7 +58,7 @@ class TwweetCLI():
         elif option == '3':
             self.twweeter_obj.get_trending_topics()
         elif option == '4':
-            print(('\nStreaming tweets from your TimeLine...'))
+            print(('\nStreaming twweets from your Timeline...'))
             self.listener_obj.stream_your_tl()
             return False
             # read_timeline(api)
@@ -67,7 +67,7 @@ class TwweetCLI():
         elif option == '6':
             self.twweeter_obj.get_tweets()
         else:
-            print(('please choose any of the above options\n \n'))
+            print(('Please choose any of the above options\n \n'))
 
     def main(self):
         self.twweeter_obj = Twweeter()
@@ -87,7 +87,7 @@ _________ .____    .___
  \______  /_______ \___| 
         \/        \/ 
         """)
-        print('Press 99 to quit the Application')
+        print('Press 99 to quit the application')
         while True:
             option = input('Enter \'twweet\' or \'get\' or \'edit\': ')
             if option == '99':
