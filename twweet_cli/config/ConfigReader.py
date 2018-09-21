@@ -15,8 +15,8 @@ class ConfigurationReader(object):
     def __init__(self):
         with open(yml_path + '/.twweet-cli/data/config.yml', 'r') as ymlfile:
              cfg = yaml.load(ymlfile)
-        ConfigurationReader.__tweets = cfg['tweets']
-        ConfigurationReader.__hashtag = cfg['hashtag']
+        ConfigurationReader.__tweets = cfg['Tweets']
+        ConfigurationReader.__hashtag = cfg['HashTag']
 
     @staticmethod
     def get_tweets_storage():
