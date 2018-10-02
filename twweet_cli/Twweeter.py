@@ -73,7 +73,7 @@ class Twweeter():
             last = len(all_tweets)
 
         # transform the tweepy tweets into a 2D array that will populate the csv
-        out_tweets = [[tweet.id_str,tweet.created_at,tweet.text.encode("utf-8")]for tweet in all_tweets]
+        out_tweets = [[tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")]for tweet in all_tweets]
 
         # write to csv
         global tweets_storage
@@ -155,7 +155,7 @@ class Twweeter():
             print("{}.{}".format(id_num, tweet["text"]))
 
     def get_creds(self):
-        if not os.path.isfile(home+'/.twweet-cli/data/creds.json'):
+        if not os.path.isfile(home + '/.twweet-cli/data/creds.json'):
             self.create_creds()
         with open(home + '/.twweet-cli/data/creds.json') as json_file:
             return json.load(json_file)
@@ -171,7 +171,7 @@ class Twweeter():
                         "access_token": at,
                         "access_token_secret": ats}
 
-            with open(home+"/.twweet-cli/data/creds.json", "w") as outfile:
+            with open(home + "/.twweet-cli/data/creds.json", "w") as outfile:
                 json.dump(jsondata, outfile)
 
         except KeyError:
