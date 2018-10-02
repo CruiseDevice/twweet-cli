@@ -36,14 +36,14 @@ class TwweetCLI():
 
     def home_select_action(self):
 
-        option = input(
-            '''1. Get tweets of any user
+        option = input('''
+            1. Get tweets of any user
             2. Get tweets of particular hashtag
             3. Get trending topics
-            4. Read your timeline
-            5. Get your followers list
-            6. Get your tweets
-            Press 99 to exit or press 66 to go back to main menu :: ''')
+            4. Get your followers list
+            5. Get your tweets
+            Press 99 to exit or press 66 to go back to main menu ::
+        ''')
         if option == '99':
             sys.exit(0)
         if option == '66':
@@ -58,13 +58,8 @@ class TwweetCLI():
         elif option == '3':
             self.twweeter_obj.get_trending_topics()
         elif option == '4':
-            print(('\nStreaming twweets from your Timeline...'))
-            self.listener_obj.stream_your_tl()
-            return False
-            # read_timeline(api)
-        elif option == '5':
             self.twweeter_obj.get_followers_list()
-        elif option == '6':
+        elif option == '5':
             self.twweeter_obj.get_tweets()
         else:
             print(('Please choose any of the above options\n \n'))
@@ -73,19 +68,19 @@ class TwweetCLI():
         self.twweeter_obj = Twweeter()
         self.listener_obj = Listener(self.twweeter_obj)
         self.check_data_dir_exists()
-        print(""" 
+        print("""
 _____________      __  __      ___________________________________
 \__    ___/  \    /  \/  \    /  \_   _____/\_   _____/\__    ___/
   |    |  \   \/\/   /\   \/\/   /|    __)_  |    __)_   |    |     ______ 
   |    |   \        /  \        / |        \ |        \  |    |    /_____/ 
   |____|    \__/\  /    \__/\  / /_______  //_______  /  |____| 
                  \/          \/          \/         \/ 
-_________ .____    .___ 
-\_   ___ \|    |   |   | 
-/    \  \/|    |   |   | 
-\     \___|    |___|   | 
- \______  /_______ \___| 
-        \/        \/ 
+_________ .____    .___
+\_   ___ \|    |   |   |
+/    \  \/|    |   |   |
+\     \___|    |___|   |
+ \______  /_______ \___|
+        \/        \/
         """)
         print('Press 99 to quit the application')
         while True:

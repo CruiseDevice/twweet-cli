@@ -78,15 +78,10 @@ class Listener():
                                listener=self.stream_listener_ob)
         return stream
 
-    # listen for tweets on the current user's timeline
-    def stream_your_tl(self):
-        stream = self.auth_streamer()
-        stream.userstream(_with='following', async=True)
-
     # listen for tweets containing a specific word or hashtag (a phrase might work too)
     def stream_word_or_hashtag(self, words_list):
         stream = self.auth_streamer()
-        stream.filter(track=words_list, async=True)
+        stream.filter(track=words_list, is_async=True)
 
 
 '''END STREAM'''
