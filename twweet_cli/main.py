@@ -50,9 +50,11 @@ class TwweetCLI():
             print(('\n\n'))
             return False
         if option == '1':
-            self.twweeter_obj.get_all_tweets(input('Enter the username whose twweet\'s you want to grab '))
+            self.twweeter_obj.get_all_tweets(input('Enter the username whose \
+                                                 twweet\'s you want to grab '))
         elif option == '2':
-            words = input('Enter the hashtag or word\nyou may enter multiple words/hashtags separated by a "," : ')
+            words = input('Enter the hashtag or word\nyou may enter multiple\
+                             words/hashtags separated by a "," : ')
             self.listener_obj.stream_word_or_hashtag(words_list=words)
             # get_tweets_of_hashtag(input('Enter the hashtag : '))
         elif option == '3':
