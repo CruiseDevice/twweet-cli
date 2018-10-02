@@ -29,7 +29,8 @@ class TwtApiDetails(install):
         print("""Creating default config files.
               Please note that this overwrites the files if exist....""")
         with open(home + '/.twweet-cli/data/config.yml', 'w') as ymlfile:
-            ymlLine1 = "#Depending on the system(Windows or Linux) change the backward or forward slash appropriately."
+            ymlLine1 = "#Depending on the system(Windows or Linux) change the\
+                             backward or forward slash appropriately."
             ymlLine2 = "Tweets: /TweetsStore/"
             ymlLine3 = "HashTag: /HashTagStore/"
             ymlfile.write("%s\n%s\n%s\n" % (ymlLine1, ymlLine2, ymlLine3))
@@ -61,7 +62,8 @@ def create_creds():
             "access_token_secret": os.environ["ACCESS_TOKEN_SECRET"].strip()
         }
     except Exception as e:
-        print("Make sure to set your Twitter OAuth credentials in your .env file. Refer to Readme for project setup.")
+        print("Make sure to set your Twitter OAuth credentials in your .env\
+                 file. Refer to Readme for project setup.")
         raise e
     with open(home + "/.twweet-cli/data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)

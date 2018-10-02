@@ -4,8 +4,8 @@ import tweepy
 
 
 class StreamListener(tweepy.StreamListener):
-    # Decided I would keep all the overridable functions from the BaseClass
-    # so we know what we have to play with.
+    # Decided I would keep all the overridable functions from the 
+    # BaseClass so we know what we have to play with.
     def __init__(self, twweeter_obj, time_limit=60):
         self.twweeter_obj = twweeter_obj
         super(StreamListener, self).__init__(self.twweeter_obj.api)
@@ -57,7 +57,8 @@ class StreamListener(tweepy.StreamListener):
         """Called when twitter sends a disconnect notice
 
         Disconnect codes are listed here:
-        https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
+        https://dev.twitter.com/docs/streaming-apis/\
+        messages#Disconnect_messages_disconnect
         """
         return
 
@@ -78,7 +79,8 @@ class Listener():
                                listener=self.stream_listener_ob)
         return stream
 
-    # listen for tweets containing a specific word or hashtag (a phrase might work too)
+    # listen for tweets containing a specific word or hashtag \
+    #(a phrase might work too)
     def stream_word_or_hashtag(self, words_list):
         stream = self.auth_streamer()
         stream.filter(track=words_list, is_async=True)
