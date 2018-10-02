@@ -38,6 +38,11 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 * Access Token
 * Access Token Secret
 
+**Set Twitter OAuth credentials in ENV file**
+
+`cp .env.example .env`
+* replace `placeholder` with your relevant keys
+
 **Run the application**
 
 `$ twweet-cli`

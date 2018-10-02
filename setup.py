@@ -11,6 +11,9 @@ import os
 import json
 import shutil
 
+from dotenv import load_dotenv
+load_dotenv()
+
 here = os.path.abspath(os.path.dirname(__file__))
 home = os.path.expanduser("~")
 
@@ -36,7 +39,7 @@ class TwtApiDetails(install):
 def check_data_dir_exists():
     try:
         original_umask = os.umask(0)
-        if os.path.exists(home+'/.twweet-cli/data'):
+        if os.path.exists(home + '/.twweet-cli/data'):
             response = input("""The data directory already exists.
                              Would you like to overwrite? [yes/no] : """)
             if response.lower() == 'yes':
@@ -50,14 +53,16 @@ def check_data_dir_exists():
 
 
 def create_creds():
-    ck = input('Enter your Consumer Key: ').strip()
-    cs = input('Enter your Consumer Secret: ').strip()
-    at = input('Enter your Access Token: ').strip()
-    ats = input('Enter your Access Token Secret: ').strip()
-    jsondata = {"consumer_key": ck,
-                "consumer_secret": cs,
-                "access_token": at,
-                "access_token_secret": ats}
+    try:
+        jsondata = {
+            "consumer_key": os.environ["CONSUMER_KEY"].strip(),
+            "consumer_secret": os.environ["CONSUMER_SECRET"].strip(),
+            "access_token": os.environ["ACCESS_TOKEN"].strip(),
+            "access_token_secret": os.environ["ACCESS_TOKEN_SECRET"].strip()
+        }
+    except Exception as e:
+        print("Make sure to set your Twitter OAuth credentials in your .env file. Refer to Readme for project setup.")
+        raise e
     with open(home + "/.twweet-cli/data/creds.json", "w") as outfile:
         json.dump(jsondata, outfile)
     os.chmod(home + '/.twweet-cli/data/creds.json', 0o777)
@@ -93,13 +98,13 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
         'tweepy',
-        'pyyaml'
-     ],
+        'pyyaml',
+        'python-dotenv',
+    ],
 
     entry_points={
         'console_scripts': [
             'twweet-cli = twweet_cli.main:cli',
         ],
-     },
-
+    },
 )
