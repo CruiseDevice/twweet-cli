@@ -1,0 +1,4 @@
+setuptools==39.1.0
+tweepy==3.6.0
+python-dotenv==0.9.1
+PyYAML==3.13
