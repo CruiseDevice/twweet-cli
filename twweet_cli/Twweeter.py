@@ -95,7 +95,7 @@ class Twweeter():
 
     # function to download the tweets of a particular hashtag
     def get_tweets_of_hashtag(self, hash_tag):
-        print(("Please be patient while we download the tweets"))
+        print("Please be patient while we download the tweets")
 
         # initialize a list to hold all the tweepy Tweets
         all_tweets = []
@@ -123,7 +123,7 @@ class Twweeter():
                 if tweet:
                     writer.writerow([tweet])
 
-        print(("1000 tweets have been saved to {}.csv".format(hash_tag)))
+        print(f"1000 tweets have been saved to{hash_tag}.csv")
 
     def get_trending_topics(self):
 
