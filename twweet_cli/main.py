@@ -50,11 +50,12 @@ class TwweetCLI():
             print(('\n\n'))
             return False
         if option == '1':
-            self.twweeter_obj.get_all_tweets(input('Enter the username whose \
-                                                 twweet\'s you want to grab '))
+            self.twweeter_obj.get_all_tweets(input(
+                'Enter the username whose twweet\'s you want to grab '
+                )
+            )
         elif option == '2':
-            words = input('Enter the hashtag or word\nyou may enter multiple\
-                             words/hashtags separated by a "," : ')
+            words = input('Enter the hashtag or word you may enter multiple words/hashtags separated by a "," : ')
             self.listener_obj.stream_word_or_hashtag(words_list=words)
             # get_tweets_of_hashtag(input('Enter the hashtag : '))
         elif option == '3':
@@ -70,20 +71,7 @@ class TwweetCLI():
         self.twweeter_obj = Twweeter()
         self.listener_obj = Listener(self.twweeter_obj)
         self.check_data_dir_exists()
-        print("""
-_____________      __  __      ___________________________________
-\__    ___/  \    /  \/  \    /  \_   _____/\_   _____/\__    ___/
-  |    |  \   \/\/   /\   \/\/   /|    __)_  |    __)_   |    |     ______ 
-  |    |   \        /  \        / |        \ |        \  |    |    /_____/ 
-  |____|    \__/\  /    \__/\  / /_______  //_______  /  |____| 
-                 \/          \/          \/         \/ 
-_________ .____    .___
-\_   ___ \|    |   |   |
-/    \  \/|    |   |   |
-\     \___|    |___|   |
- \______  /_______ \___|
-        \/        \/
-        """)
+        print('Welcome to Twweet-Cli')
         print('Press 99 to quit the application')
         while True:
             option = input('Enter \'twweet\' or \'get\' or \'edit\': ')

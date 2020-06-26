@@ -6,7 +6,6 @@ Created on Thu Aug 17 01:26:52 2017
 import yaml
 from os.path import expanduser
 
-# TODO: implement singleton pattern here
 yml_path = expanduser("~")
 
 
