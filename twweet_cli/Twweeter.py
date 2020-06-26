@@ -146,8 +146,9 @@ class Twweeter():
 
     def get_followers_list(self):
         id_num = 0
-        num_followers = int(input('Enter number of followers you want to \
-                                    get: '))
+        num_followers = int(
+            input('Enter number of followers you want to get: ')
+        )
         for friend in tweepy.Cursor(self.api.followers).items(num_followers):
             friend = friend._json
             id_num += 1
@@ -156,7 +157,9 @@ class Twweeter():
 
     def get_tweets(self):
         id_num = 0
-        num_tweets = int(input('Enter the number of Tweets you want to get: '))
+        num_tweets = int(
+            input('Enter the number of Tweets you want to get: ')
+        )
         for tweet in tweepy.Cursor(self.api.user_timeline).items(num_tweets):
             # process_or_store(tweet._json)
             tweet = tweet._json
