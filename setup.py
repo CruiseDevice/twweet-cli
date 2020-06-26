@@ -45,7 +45,9 @@ def check_data_dir_exists():
                              Would you like to overwrite? [yes/no] : """)
             if response.lower() == 'yes':
                 shutil.rmtree(home + '/.twweet-cli/data')
-        os.makedirs(home + '/.twweet-cli/data')
+                os.makedirs(home + '/.twweet-cli/data')
+            elif response.lower() == 'no':
+                print("Not overwriting...")
     except OSError:
         print("Cannot create data dir the installation cannot continue..")
         exit()
@@ -71,8 +73,8 @@ def create_creds():
 
 
 setup(
-    name='twweet_cli',
-    version='1.0.0',
+    name='twweet_cli-CruiseDevice',
+    version='2.0.0',
 
     description='Tweet right from your cli without even opening your browser.',
     long_description=long_description,
@@ -95,7 +97,7 @@ setup(
     cmdclass={
         'install': TwtApiDetails,
     },
-
+    python_requires='>=3.6',
     keywords='twitter tweet cli',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=[
