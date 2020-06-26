@@ -1,20 +1,10 @@
-resources.txt
-twweet_cli.egg-info
 dist
 build
-CruiseDevice_tweets.csv
-data/
+data
 resources.txt
-twweet_cli.egg-info
 dist
 build
-CruiseDevice_tweets.csv
-data/
 *.pyc
-
-# PyCharm internal folder
+__pycache__
 .idea/
-
-/.vs
-
 .env
