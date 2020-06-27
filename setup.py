@@ -14,17 +14,18 @@ import shutil
 from dotenv import load_dotenv
 load_dotenv()
 
-here = os.path.abspath(os.path.dirname(__file__))
+curr = os.path.abspath(os.path.dirname(__file__))
 home = os.path.expanduser("~")
 
-with open(os.path.join(here, 'PypiReadme.md'), encoding='utf-8') as f:
+with open(os.path.join(curr, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
     name='twweet_cli',
-    version='2.0.9',
+    version='2.1.0',
     description='Tweet right from your cli without even opening your browser.',
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/CruiseDevice/twweet-cli/',
     author='Akash Chavan',
     author_email='achavan1211@gmail.com',
