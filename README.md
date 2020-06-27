@@ -1,32 +1,41 @@
 # twweet-cli
-Tweet right from your cli without even opening your browser.
+
+> Tweet right from your cli without even opening your browser.
 
 [![Join the chat at https://gitter.im/twweet-cli/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twweet-cli/Lobby) [![Build Status](https://travis-ci.org/CruiseDevice/twweet-cli.svg?branch=master)](https://travis-ci.org/CruiseDevice/twweet-cli)
 
 
 ## Install
 
+`
+pip install twweet-cli
+`
+
 ### Build from Source
-
-**Install the dependencies**
-
-`$ pip install tweepy`
 
 **Clone the source**
 
-`$ git clone https://github.com/CruiseDevice/twweet-cli.git`
+`
+$ git clone https://github.com/CruiseDevice/twweet-cli.git
+`
 
 **Navigate to the tweet-cli folder**
 
-`$ cd twweet-cli`
+`
+$ cd twweet-cli
+`
 
 **Now run setup.py file.**
 
 For Linux users:
-`$ sudo python3 setup.py install`
+`
+$ sudo python3 setup.py install
+`
 
 For Windows users:
-`$ python setup.py install`
+`
+$ python setup.py install
+`
 
 **Create a Twitter "App"**
 
@@ -37,14 +46,12 @@ Log in to https://apps.twitter.com/ to create a new app and generate your OAuth 
 * Access Token
 * Access Token Secret
 
-**Set Twitter OAuth credentials in ENV file**
-
-`cp .env.example .env`
-* replace `placeholder` with your relevant keys
 
 **Run the application**
 
-`$ twweet-cli`
+`
+$ twweet-cli
+`
 
 **_Note: Requires Python 3.x_**
 

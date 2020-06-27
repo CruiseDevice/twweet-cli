@@ -164,7 +164,13 @@ class Twweeter():
             id_num += 1
             print("{}.{}".format(id_num, tweet["text"]))
 
+    def data_dir_exists(self):
+        return os.path.exists(home + '/.twweet-cli/data')
+
     def get_creds(self):
+        if not self.data_dir_exists():
+            os.makedirs(home + '/.twweet-cli/data')
+
         if not os.path.isfile(home + '/.twweet-cli/data/creds.json'):
             self.create_creds()
         with open(home + '/.twweet-cli/data/creds.json') as json_file:

@@ -36,15 +36,6 @@ class TwweetCLI():
         print("DONE \n")
         return self.f
 
-    def check_data_dir_exists(self):
-        try:
-            original_umask = os.umask(0)
-            os.makedirs(home + '/.twweet-cli/data')
-        except OSError:
-            pass
-        finally:
-            os.umask(original_umask)
-
     def home_select_action(self):
 
         option = input(OPTIONS)
@@ -74,7 +65,7 @@ class TwweetCLI():
     def main(self):
         self.twweeter_obj = Twweeter()
         self.listener_obj = Listener(self.twweeter_obj)
-        self.check_data_dir_exists()
+
         print('Welcome to Twweet-Cli')
         print('Press 99 to quit the application')
         while True:
