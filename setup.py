@@ -74,18 +74,13 @@ def create_creds():
 
 setup(
     name='twweet_cli-CruiseDevice',
-    version='2.0.0',
-
+    version='2.0.5',
     description='Tweet right from your cli without even opening your browser.',
     long_description=long_description,
-
     url='https://github.com/CruiseDevice/twweet-cli/',
-
     author='Akash Chavan',
     author_email='achavan1211@gmail.com',
-
     license='MIT',
-
     classifiers=[
         'Development Status :: 5 - Production/Stable',
 
@@ -93,19 +88,17 @@ setup(
 
         'Programming Language :: Python :: 3.6',
     ],
-
     cmdclass={
         'install': TwtApiDetails,
     },
     python_requires='>=3.6',
     keywords='twitter tweet cli',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(),
     install_requires=[
         'tweepy',
         'pyyaml',
         'python-dotenv',
     ],
-
     entry_points={
         'console_scripts': [
             'twweet-cli = twweet_cli.main:cli',

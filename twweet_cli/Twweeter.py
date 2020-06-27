@@ -7,9 +7,6 @@ from .config.ConfigReader import ConfigurationReader
 
 # Twitter API credentials
 home = os.path.expanduser("~")
-configuration = ConfigurationReader()
-tweets_storage = configuration.get_tweets_storage()
-hashtag_storage = configuration.get_tweets_storage()
 
 
 class Twweeter():
@@ -81,8 +78,9 @@ class Twweeter():
         out_tweets = [[tweet.id_str, tweet.created_at, tweet.text\
                         .encode("utf-8")]for tweet in all_tweets]
 
+        configuration = ConfigurationReader()
         # write to csv
-        global tweets_storage
+        tweets_storage = configuration.get_tweets_storage()
         tweets_storage = str(os.getcwd() + tweets_storage)
         os.makedirs(os.path.dirname(tweets_storage), exist_ok=True)
         f_name = str(tweets_storage + screen_name + '_tweets.csv')
@@ -113,7 +111,7 @@ class Twweeter():
             if (len(all_tweets)) >= 1000:
                 break
 
-        global hashtag_storage
+        hashtag_storage = configuration.get_tweets_storage()
         hashtag_storage = str(os.getcwd() + hashtag_storage)
         os.makedirs(os.path.dirname(tweets_storage), exist_ok=True)
         file_name = str(hashtag_storage + hash_tag + 's.csv')
