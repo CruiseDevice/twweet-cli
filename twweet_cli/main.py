@@ -6,7 +6,18 @@ from .Listener import Listener
 
 # Twitter API credentials
 home = expanduser("~")
+OPTIONS = """
+1. Get tweets of any user
+2. Get tweets of particular hashtag
+3. Get trending topics
+4. Get your followers list
+5. Get your tweets
+Press 99 to exit or press 66 to go back to main menu ::
+"""
 
+HASHTAG_MSG = """
+Enter the hashtag or word you may enter multiple words/hashtags separated by a "," : 
+"""
 
 def _decorator(f):
     f()
@@ -25,39 +36,23 @@ class TwweetCLI():
         print("DONE \n")
         return self.f
 
-    def check_data_dir_exists(self):
-        try:
-            original_umask = os.umask(0)
-            os.makedirs(home + '/.twweet-cli/data')
-        except OSError:
-            pass
-        finally:
-            os.umask(original_umask)
-
     def home_select_action(self):
 
-        option = input('''
-            1. Get tweets of any user
-            2. Get tweets of particular hashtag
-            3. Get trending topics
-            4. Get your followers list
-            5. Get your tweets
-            Press 99 to exit or press 66 to go back to main menu ::
-        ''')
+        option = input(OPTIONS)
         if option == '99':
             sys.exit(0)
         if option == '66':
             print(('\n\n'))
             return False
         if option == '1':
-            self.twweeter_obj.get_all_tweets(input(
-                'Enter the username whose twweet\'s you want to grab '
+            self.twweeter_obj.get_all_tweets(
+                input(
+                    'Enter the username whose twweet\'s you want to grab '
                 )
             )
         elif option == '2':
-            words = input('Enter the hashtag or word you may enter multiple words/hashtags separated by a "," : ')
+            words = input(HASHTAG_MSG)
             self.listener_obj.stream_word_or_hashtag(words_list=words)
-            # get_tweets_of_hashtag(input('Enter the hashtag : '))
         elif option == '3':
             self.twweeter_obj.get_trending_topics()
         elif option == '4':
@@ -70,7 +65,7 @@ class TwweetCLI():
     def main(self):
         self.twweeter_obj = Twweeter()
         self.listener_obj = Listener(self.twweeter_obj)
-        self.check_data_dir_exists()
+
         print('Welcome to Twweet-Cli')
         print('Press 99 to quit the application')
         while True:
